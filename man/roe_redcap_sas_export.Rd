@@ -14,6 +14,8 @@ roe_redcap_sas_export(
 \item{token}{The user-specific string that serves as the password for a project.}
 
 \item{sas7bdat}{The name to be used for the sas7bdat file.}
+
+\item{redcap_uri}{The URI (uniform resource identifier) of the REDCap project.}
 }
 \description{
 The SAS export capability of REDCap v9.5 is broken such that the
