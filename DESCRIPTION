@@ -1,0 +1,18 @@
+Package: roelabr
+Type: Package
+Title: A collection of functions for the Roe Lab at Washington University
+Version: 0.1.0
+Author: Matthew Schuelke
+Maintainer: Matthew Schuelke <matt@themadstatter.com>
+Description: A collection of functions for the Roe Lab at Washington University.
+    Having a central location for commonly utilized code is good practice.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Depends:
+    dplyr
+Imports: 
+    foreign,
+    httr,
+    REDCapR
+RoxygenNote: 7.1.1

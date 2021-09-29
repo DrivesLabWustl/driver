@@ -1,0 +1,96 @@
+---
+output: github_document
+params:
+  github: RoeLabWustl
+  package: roelabr
+  font: Rockwell
+  install_font: FALSE
+  font_ext: ttf
+  color: "#a51417"
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  eval = FALSE
+)
+```
+
+```{r sticker, eval=FALSE, include=FALSE}
+# install font from package (false because rockwell not in package)
+if(params$install_font) {
+  sysfonts::font_add(
+    family = params$font,
+    regular = system.file(
+      paste0("fonts/", params$font, "-Regular.", params$font_ext), 
+      package = params$package),
+    bold = system.file(
+      paste0("fonts/", params$font, "-Bold.", params$font_ext), 
+      package = params$package),
+    italic = system.file(
+      paste0("fonts/", params$font, "-Italic.", params$font_ext), 
+      package = params$package),
+    bolditalic = system.file(
+      paste0("fonts/", params$font, "-BoldItalic.", params$font_ext), 
+      package = params$package))
+}
+
+showtext::showtext_auto()
+
+library(hexSticker)
+
+sticker(subplot = paste0("man/figures/", params$package, "_logo.png"),
+        s_x = 1,
+        s_y = 1.1,
+        s_width = 0.75,
+        s_height = 0.75,
+        package  = params$package,
+        p_x = 1,
+        p_y = 0.5,
+        p_color = params$color,
+        p_family = params$font,
+        p_size = 18,
+        h_fill = "#ffffff",
+        h_color = params$color,
+        url = paste("github.com", params$github, params$package, sep = "/"),
+        u_color = "black",
+        u_family = params$font,
+        u_size = 3.5,
+        u_x = 1.005,
+        u_y = 0.1,
+        filename = paste0("man/figures/", params$package, "_hex.png"))
+```
+
+# `r params$package` <img src="man/figures/`r params$package`_hex.png" align="right" width="125px" />
+
+<!-- badges: start -->
+[![Under Development](https://img.shields.io/badge/status-under%20development-red.svg)](https://github.com/`r params$github`/`r params$package`)
+[![Last Commit](https://img.shields.io/github/last-commit/`r params$github`/`r params$package`.svg)](https://github.com/`r params$github`/`r params$package`/commits/master)
+<!-- badges: end -->
+
+## Overview
+
+The goal of ``r params$package`` is to provide helpful functions for the Roe Lab at Washington University in Saint Louis.
+
+<br />
+
+## Installation
+
+You can install ``r params$package`` from [GitHub](https://github.com/`r params$github`/`r params$package`) with:
+
+```r
+remotes::install_github("`r params$github`/`r params$package`")
+```
+
+<br />
+
+## About
+
+### Washington University in Saint Louis <img src="man/figures/brookings_seal.png" align="right" width="125px"/>
+
+Established in 1853, [Washington University in Saint Louis](https://www.wustl.edu) is among the world's leaders in teaching, research, patient care, and service to society. Bosting 24 Nobel laureates to date, the University is ranked 7th in the world for most cited researchers, received the 4th highest amount of NIH medical research grants among medical schools in 2019, and was tied for 1st in the United States for genetics and genomics in 2018. The University is committed to learning and exploration, discovery and impact, and intellectual passions and challenging the unknown.
