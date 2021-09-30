@@ -4,7 +4,6 @@ params:
   github: RoeLabWustl
   package: roelabr
   font: Rockwell
-  install_font: FALSE
   font_ext: ttf
   color: "#a51417"
 ---
@@ -22,24 +21,6 @@ knitr::opts_chunk$set(
 ```
 
 ```{r sticker, eval=FALSE, include=FALSE}
-# install font from package (false because rockwell not in package)
-if(params$install_font) {
-  sysfonts::font_add(
-    family = params$font,
-    regular = system.file(
-      paste0("fonts/", params$font, "-Regular.", params$font_ext), 
-      package = params$package),
-    bold = system.file(
-      paste0("fonts/", params$font, "-Bold.", params$font_ext), 
-      package = params$package),
-    italic = system.file(
-      paste0("fonts/", params$font, "-Italic.", params$font_ext), 
-      package = params$package),
-    bolditalic = system.file(
-      paste0("fonts/", params$font, "-BoldItalic.", params$font_ext), 
-      package = params$package))
-}
-
 showtext::showtext_auto()
 
 library(hexSticker)
@@ -75,7 +56,7 @@ sticker(subplot = paste0("man/figures/", params$package, "_logo.png"),
 
 ## Overview
 
-The goal of ``r params$package`` is to provide helpful functions for the Roe Lab at Washington University in Saint Louis.
+The goal of ``r params$package`` is to provide helpful functions for the [Roe Lab at Washington University in Saint Louis](https://roelab.wustl.edu/).
 
 <br />
 

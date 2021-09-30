@@ -6,23 +6,24 @@
 \usage{
 roe_redcap_sas_export(
   token,
-  sas7bdat = "redcap",
+  filename = "roe_redcap_sas_export",
   redcap_uri = "https://redcap.wustl.edu/redcap/api/"
 )
 }
 \arguments{
 \item{token}{The user-specific string that serves as the password for a project.}
 
-\item{sas7bdat}{The name to be used for the sas7bdat file.}
+\item{filename}{The name to be used for all output files (.csv, .sas, .log, and .sas7bdat). Must be a valid SAS name.}
 
 \item{redcap_uri}{The URI (uniform resource identifier) of the REDCap project.}
 }
 \description{
 The SAS export capability of REDCap v9.5 is broken such that the
-generated SAS script has voluminous incorrect syntax. This function
-replicates the intended functionality of REDCap by downloading the data to a
-csv file and generating a correct SAS import script. If sas.exe is found on
-the path, the script is executed for you to produce the desired sas7bdat file.
+ generated SAS script has voluminous syntactical errors. This function
+attempts to replicate the intended functionality of REDCap by downloading the
+ data to a csv file and generating a syntactically correct SAS import script.
+  If sas.exe is found on the path, the script is executed in SAS batch mode
+  to produce the desired sas7bdat file.
 }
 \examples{
 \dontrun{

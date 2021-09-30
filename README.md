@@ -13,8 +13,8 @@ Commit](https://img.shields.io/github/last-commit/RoeLabWustl/roelabr.svg)](http
 
 ## Overview
 
-The goal of `roelabr` is to provide helpful functions for the Roe Lab at
-Washington University in Saint Louis.
+The goal of `roelabr` is to provide helpful functions for the [Roe Lab
+at Washington University in Saint Louis](https://roelab.wustl.edu/).
 
 <br />
 
