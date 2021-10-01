@@ -75,11 +75,6 @@ roe_redcap_sas_export <- function(
     .field_name <- tbl_data_dictionary$field_name[r]
     .field_label <- tbl_data_dictionary$field_label[r]
 
-    tbl_data_dictionary %>%
-      filter(field_type == "checkbox") %>%
-      filter(field_name == "arthloex") %>%
-      pull(select_choices_or_calculations) -> .choices
-
     if(.field_type == "checkbox") {
       # if fields was of type checkbox, need to add multiple label commands as
       # there will be a field (with "___#" appended) for each checkbox option
