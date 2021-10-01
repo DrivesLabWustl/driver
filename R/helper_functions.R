@@ -41,3 +41,34 @@ get_radius_gyration <- function(DF, Latitude_Name = "Trip_End_Latitude", Longitu
   Rg = sqrt((1/N) * sum(DF[, "haversine_dist"], na.rm = TRUE) ^ 2)
   return(Rg)
 }
+
+
+
+
+#' Calculate Route Straightness
+#' @author Julie Wisch
+#' @param Start_Latitude latitude coordinate for starting location
+#' @param Start_Longitude longitude coordinate for starting location
+#' @param End_Latitude latitude coordinate for ending location
+#' @param End_Longitude longitude coordinate for ending location
+#' @param Distance_Travelled distance travelled. Measured by Azuga chip. Units in Miles.
+#'
+#' @returns  straightness The straightness index. A value between 0 and 1 that indicates route straightness
+#' @examples
+#' \dontrun{
+#' get_route_straightness(38.6630107, -90.327784, 38.6247528, -90.2197958, 18.2)
+#' }
+#'
+#' @references
+#' \url{https://cran.rstudio.com/web/packages/trajr/vignettes/trajr-vignette.html}
+
+
+get_route_straightness <- function(Start_Latitude, Start_Longitude,
+                                End_Latitude, End_Longitude, Distance_Travelled){
+    hav_distance_km <- pracma::haversine(c(Start_Latitude, Start_Longitude),
+                                               c(End_Latitude, End_Longitude))#gives distance in km
+    #distance traveled / length of trajectory. Ranges between 0 and 1 where 1 is a straight line.
+    #Distance Travelled comes from Azuga in miles
+    straightness <- (hav_distance_km / 1.609) / Distance_Travelled
+    return(straightness)
+}
