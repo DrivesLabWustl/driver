@@ -5,9 +5,11 @@
 #' @param Longitude_Name Character string of the column name in DF that has the trip end longitude location
 #'
 #' @returns  Rg a single numeric value that gives the radius of gyration for the supplied dataframe in kilometers
+#'
 #' @examples
 #' \dontrun{
-#' get_radius_gyration(df[df$Map_ID == 67710, ], "Trip_End_Latitude", "Trip_End_Longitude)
+#' DF <- data.frame("MapID" = c(68771, 68771, 69876), "Trip_End_Latitude" = c(38.88768, 38.606689, 40.23523), "Trip_End_Longitude" = c(99.6986, 97.76478, 98.56789))
+#' get_radius_gyration(DF[DF$MapID == 68771,], "Trip_End_Latitude", "Trip_End_Longitude")
 #' }
 #'
 #' @references
@@ -54,6 +56,7 @@ get_radius_gyration <- function(DF, Latitude_Name = "Trip_End_Latitude", Longitu
 #' @param Distance_Travelled distance travelled. Measured by Azuga chip. Units in Miles.
 #'
 #' @returns  straightness The straightness index. A value between 0 and 1 that indicates route straightness
+#'
 #' @examples
 #' \dontrun{
 #' get_route_straightness(38.6630107, -90.327784, 38.6247528, -90.2197958, 18.2)

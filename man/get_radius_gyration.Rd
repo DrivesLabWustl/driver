@@ -23,6 +23,13 @@ Rg a single numeric value that gives the radius of gyration for the supplied dat
 \description{
 Calculate Radius of Gyration
 }
+\examples{
+\dontrun{
+DF <- data.frame("MapID" = c(68771, 68771, 69876), "Trip_End_Latitude" = c(38.88768, 38.606689, 40.23523), "Trip_End_Longitude" = c(99.6986, 97.76478, 98.56789))
+get_radius_gyration(DF[DF$MapID == 68771,], "Trip_End_Latitude", "Trip_End_Longitude")
+}
+
+}
 \references{
 \url{https://blog.jlevente.com/radius-of-gyration/}
 \url{https://alzres.biomedcentral.com/articles/10.1186/s13195-021-00852-1}
