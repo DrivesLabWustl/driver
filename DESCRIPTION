@@ -20,5 +20,6 @@ Depends:
 Imports: 
     foreign,
     httr,
-    REDCapR
+    REDCapR,
+    pracma
 RoxygenNote: 7.1.1
