@@ -3,11 +3,16 @@ Type: Package
 Title: A collection of functions for the Roe Lab at Washington University
 Version: 0.1.0
 Authors@R: 
-    person(given = "Matthew",
-           family = "Schuelke",
-           role = c("aut", "cre"),
-           email = "matt@themadstatter.com",
-           comment = c(ORCID = "0000-0001-5755-1725"))
+    c(person(given = "Matthew",
+             family = "Schuelke",
+             role = c("aut", "cre"),
+             email = "matt@themadstatter.com",
+             comment = c(ORCID = "0000-0001-5755-1725")),
+	  person(given = "Julie",
+		     family = "Wisch",
+		     role = "aut",
+		     email = "julie.wisch@wustl.edu",
+		     comment = c(ORCID = "0000-0003-3624-2784")))
 Description: A collection of functions for the Roe Lab at Washington University.
     Having a central location for commonly utilized code is good practice.
 License: GPL (>= 3)
