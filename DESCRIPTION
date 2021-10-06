@@ -26,5 +26,8 @@ Imports:
     foreign,
     httr,
     REDCapR,
-    pracma
+    pracma,
+    readr,
+    censusapi,
+    rgeocodio
 RoxygenNote: 7.1.1

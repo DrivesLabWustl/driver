@@ -16,12 +16,12 @@
 #' @examples
 #' \dontrun{
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_redcap_sas_export(token, "static")
+#' roe_get_redcap_sas_export(token, "static")
 #'
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
-#' roe_redcap_sas_export(token, "mother")
+#' roe_get_redcap_sas_export(token, "mother")
 #' }
-roe_redcap_sas_export <- function(
+roe_get_redcap_sas_export <- function(
   token,
   filename = "roe_redcap_sas_export",
   redcap_uri = "https://redcap.wustl.edu/redcap/api/"
