@@ -2,6 +2,7 @@
 
 export(roe_geocode_components)
 export(roe_get_census_urban_rural_per_block_group)
+export(roe_get_census_urban_rural_per_zip_code_tabulation_area)
 export(roe_get_drug_codes)
 export(roe_get_redcap_sas_export)
 importFrom(tibble,tibble)
