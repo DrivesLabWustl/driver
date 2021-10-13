@@ -21,7 +21,8 @@ LazyData: true
 URL: https://github.com/RoeLabWustl/roelabr
 BugReports: https://github.com/RoeLabWustl/roelabr/issues
 Depends:
-    dplyr
+    dplyr,
+    R (>= 2.10)
 Imports: 
     foreign,
     httr,
