@@ -41,7 +41,7 @@ P002005 \tab Total!!Rural	                        \tab URBAN AND RURAL \tab not 
 \examples{
 \dontrun{
 ## data for all block groups in Missouri
-roe_get_census_urban_rural_per_block_group_2010("29")
+roe_get_census_urban_rural_per_block_group("29")
 
 ## data for all block groups
 fips_codes_for_states_and_dc \%>\%
