@@ -7,9 +7,14 @@
 #'   If sas.exe is found on the path, the script is executed in SAS batch mode
 #'   to produce the desired sas7bdat file.
 #'
-#' @param token The user-specific string that serves as the password for a project.
-#' @param filename The name to be used for all output files (.csv, .sas, .log, and .sas7bdat). Must be a valid SAS name.
-#' @param redcap_uri The URI (uniform resource identifier) of the REDCap project.
+#' @param token The user-specific string that serves as the password for a
+#' project.
+#' @param filename The name to be used for all output files (.csv, .sas, .log,
+#' and .sas7bdat). Must be a valid SAS name.
+#' @param redcap_uri The URI (uniform resource identifier) of the REDCap
+#' project.
+#' @param linesize SAS linesize system option for formatting the log file.
+#' @param pagesize SAS pagesize system option for formatting the log file.
 #'
 #' @export
 #'
@@ -24,28 +29,16 @@
 roe_get_redcap_sas_export <- function(
   token,
   filename = "roe_redcap_sas_export",
-  redcap_uri = "https://redcap.wustl.edu/redcap/api/"
+  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
+  linesize = 78,
+  pagesize = 60
 ) {
   # check and prepare file names
   roe_assert_valid_sas_data_set_name(filename)
   csv_filename <- sprintf("%s.csv", filename)
   sas_filename <- sprintf("%s.sas", filename)
 
-  # download data to local csv and generate sas import code with {foreign}
-  REDCapR::redcap_read(
-    redcap_uri = redcap_uri,
-    token = token
-    ) %>%
-    `[[`("data") %>%
-    # drop instrument complete flag fields
-    dplyr::select(-dplyr::ends_with("_complete")) %>%
-    # {foreign} only works with dataframes not tibbles
-    as.data.frame() %>%
-    # write csv and sas code to disk
-    foreign::write.foreign(csv_filename, sas_filename, "SAS")
-  sas_foreign <- readLines(sas_filename)
-
-  # download the data dictionary in order to construct sas label commands
+  # download the data dictionary
   httr::POST(
     redcap_uri,
     body = list(token = token, content = "metadata", format = "csv")
@@ -66,6 +59,63 @@ roe_get_redcap_sas_export <- function(
     # descriptive fields are not labeled
     dplyr::filter(field_type != "descriptive") -> tbl_data_dictionary
 
+  # get names of note fields to later escape newline characters
+  tbl_data_dictionary %>%
+    dplyr::filter(field_type == "notes") %>%
+    dplyr::pull(field_name) -> note_field_names
+
+  # download data to local csv and make initial sas import code with {foreign}
+  REDCapR::redcap_read(
+    redcap_uri = redcap_uri,
+    token = token
+    ) %>%
+    `[[`("data") %>%
+    # drop instrument complete flag fields
+    dplyr::select(-dplyr::ends_with("_complete")) %>%
+    # escape newlines in note fields
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::all_of(note_field_names),
+        ~ gsub("\n", "NEWLINE", .)
+      )
+    ) %>%
+    # {foreign} only works with dataframes not tibbles
+    as.data.frame() %>%
+    # write csv and sas code to disk
+    foreign::write.foreign(csv_filename, sas_filename, "SAS") #tidyverse::haven?
+  # read the outputted script into memory for editing
+  sas_foreign <- readLines(sas_filename)
+
+  # correct the {foreign} script by adding informats for the time fields
+  # get names of time fields
+  tbl_data_dictionary %>%
+    filter(text_validation_type_or_show_slider_number == "time") %>%
+    pull(field_name) -> time_field_names
+
+  # determine line positions of the existing {foreign} INFORMAT statement
+  informat_start <- which(grepl("INFORMAT", sas_foreign))
+  informat_end <- which(
+    grepl(";", sas_foreign[informat_start:length(sas_foreign)])
+  )[1] + informat_start - 1
+
+  # insert a second INFORMAT statement for the time fields following the first
+  sas_foreign <- append(
+    sas_foreign,
+    c("",
+      "INFORMAT",
+      paste(" ", time_field_names),
+      " time8.",
+      ";"),
+    informat_end
+  )
+
+  # insert a FORMAT statement for each time field at the end of the script
+  sas_foreign <- append(
+    sas_foreign,
+    paste("FORMAT", time_field_names, "time8.;"),
+    length(sas_foreign) - 1
+  )
+
   # make vector of sas label commands
   sas_labeling <- c("data rdata;", "\tset rdata;")
   # for each field in the data dictionary create one or more labeling commands
@@ -79,7 +129,7 @@ roe_get_redcap_sas_export <- function(
       # if fields was of type checkbox, need to add multiple label commands as
       # there will be a field (with "___#" appended) for each checkbox option
       .choices <- unlist(strsplit(.choices, "\\|"))
-      .choices_numb <- sub(",.*$", "", .choices)
+      .choices_numb <- trimws(sub(",.*$", "", .choices))
       .choices_text <- trimws(sub("^\\d+,", "", .choices))
 
       for(i in 1:length(.choices)) {
@@ -120,5 +170,12 @@ roe_get_redcap_sas_export <- function(
   sas_foreign_with_labeling <- c(sas_foreign, "", sas_labeling, "", sas_export)
   writeLines(sas_foreign_with_labeling, sas_filename)
   if(Sys.which("sas")[[1]] != "")
-    shell(sprintf("sas.exe -SYSIN %s", sas_filename))
+    shell(
+      sprintf(
+        "sas.exe -SYSIN %s -linesize %s -pagesize %s",
+        sas_filename,
+        linesize,
+        pagesize
+      )
+    )
 }

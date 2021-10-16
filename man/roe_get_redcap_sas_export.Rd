@@ -7,15 +7,24 @@
 roe_get_redcap_sas_export(
   token,
   filename = "roe_redcap_sas_export",
-  redcap_uri = "https://redcap.wustl.edu/redcap/api/"
+  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
+  linesize = 78,
+  pagesize = 60
 )
 }
 \arguments{
-\item{token}{The user-specific string that serves as the password for a project.}
+\item{token}{The user-specific string that serves as the password for a
+project.}
 
-\item{filename}{The name to be used for all output files (.csv, .sas, .log, and .sas7bdat). Must be a valid SAS name.}
+\item{filename}{The name to be used for all output files (.csv, .sas, .log,
+and .sas7bdat). Must be a valid SAS name.}
 
-\item{redcap_uri}{The URI (uniform resource identifier) of the REDCap project.}
+\item{redcap_uri}{The URI (uniform resource identifier) of the REDCap
+project.}
+
+\item{linesize}{SAS linesize system option for formatting the log file.}
+
+\item{pagesize}{SAS pagesize system option for formatting the log file.}
 }
 \description{
 The SAS export capability of REDCap v9.5 is broken such that the
