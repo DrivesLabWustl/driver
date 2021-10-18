@@ -22,17 +22,17 @@ and .sas7bdat). Must be a valid SAS name.}
 \item{redcap_uri}{The URI (uniform resource identifier) of the REDCap
 project.}
 
-\item{linesize}{SAS linesize system option for formatting the log file.}
+\item{linesize}{SAS linesize system option for formatting any sas output.}
 
-\item{pagesize}{SAS pagesize system option for formatting the log file.}
+\item{pagesize}{SAS pagesize system option for formatting any sas output.}
 }
 \description{
 The SAS export capability of REDCap v9.5 is broken such that the
  generated SAS script has voluminous syntactical errors. This function
 attempts to replicate the intended functionality of REDCap by downloading the
  data to a csv file and generating a syntactically correct SAS import script.
-  If sas.exe is found on the path, the script is executed in SAS batch mode
-  to produce the desired sas7bdat file.
+ If sas is found on the path, the script is executed in SAS batch mode to
+produce the desired sas7bdat file.
 }
 \examples{
 \dontrun{

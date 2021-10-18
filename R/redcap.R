@@ -4,8 +4,8 @@
 #'  generated SAS script has voluminous syntactical errors. This function
 #' attempts to replicate the intended functionality of REDCap by downloading the
 #'  data to a csv file and generating a syntactically correct SAS import script.
-#'   If sas.exe is found on the path, the script is executed in SAS batch mode
-#'   to produce the desired sas7bdat file.
+#'  If sas is found on the path, the script is executed in SAS batch mode to
+#' produce the desired sas7bdat file.
 #'
 #' @param token The user-specific string that serves as the password for a
 #' project.
@@ -13,8 +13,8 @@
 #' and .sas7bdat). Must be a valid SAS name.
 #' @param redcap_uri The URI (uniform resource identifier) of the REDCap
 #' project.
-#' @param linesize SAS linesize system option for formatting the log file.
-#' @param pagesize SAS pagesize system option for formatting the log file.
+#' @param linesize SAS linesize system option for formatting any sas output.
+#' @param pagesize SAS pagesize system option for formatting any sas output.
 #'
 #' @export
 #'
@@ -172,7 +172,7 @@ roe_get_redcap_sas_export <- function(
   if(Sys.which("sas")[[1]] != "")
     shell(
       sprintf(
-        "sas.exe -SYSIN %s -linesize %s -pagesize %s",
+        "sas -SYSIN %s -linesize %s -pagesize %s",
         sas_filename,
         linesize,
         pagesize
