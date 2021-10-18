@@ -9,6 +9,7 @@
 Development](https://img.shields.io/badge/status-under%20development-red.svg)](https://github.com/RoeLabWustl/roelabr)
 [![Last
 Commit](https://img.shields.io/github/last-commit/RoeLabWustl/roelabr.svg)](https://github.com/RoeLabWustl/roelabr/commits/master)
+[![R-CMD-check](https://github.com/RoeLabWustl/roelabr/workflows/R-CMD-check/badge.svg)](https://github.com/RoeLabWustl/roelabr/actions)
 <!-- badges: end -->
 
 ## Overview
