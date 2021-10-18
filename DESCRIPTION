@@ -31,4 +31,6 @@ Imports:
     readr,
     censusapi,
     rgeocodio
+Remotes:
+    hrbrmstr/rgeocodio
 RoxygenNote: 7.1.1
