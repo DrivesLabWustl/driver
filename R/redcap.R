@@ -169,7 +169,9 @@ roe_get_redcap_sas_export <- function(
   # collate the sas code blocks to a file and run in sas batch mode
   sas_foreign_with_labeling <- c(sas_foreign, "", sas_labeling, "", sas_export)
   writeLines(sas_foreign_with_labeling, sas_filename)
-  if(Sys.which("sas")[[1]] != "")
+  sas_path <- Sys.which("sas")[[1]]
+  if(sas_path != "") {
+    message(sprintf("Running SAS script using %s.", sas_path))
     shell(
       sprintf(
         "sas -SYSIN %s -linesize %s -pagesize %s",
@@ -178,4 +180,7 @@ roe_get_redcap_sas_export <- function(
         pagesize
       )
     )
+  } else {
+    message("SAS not found on current system.")
+  }
 }
