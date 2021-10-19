@@ -21,14 +21,14 @@
 #' @examples
 #' \dontrun{
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_get_redcap_sas_export(token, "static")
+#' roe_get_redcap_sas_export(token, roe_timestamp_filename("static"))
 #'
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
-#' roe_get_redcap_sas_export(token, "mother")
+#' roe_get_redcap_sas_export(token, roe_timestamp_filename("mother"))
 #' }
 roe_get_redcap_sas_export <- function(
   token,
-  filename = "roe_redcap_sas_export",
+  filename = roe_timestamp_filename("roe_redcap_sas_export"),
   redcap_uri = "https://redcap.wustl.edu/redcap/api/",
   linesize = 78,
   pagesize = 60
@@ -85,6 +85,14 @@ roe_get_redcap_sas_export <- function(
     foreign::write.foreign(csv_filename, sas_filename, "SAS") #tidyverse::haven?
   # read the outputted script into memory for editing
   sas_foreign <- readLines(sas_filename)
+
+  # overwrite {foreign} comments with a filename and libname statements
+  sas_foreign[1] <- sprintf("FILENAME in '%s';", tools::file_path_as_absolute(csv_filename))
+  sas_foreign[2] <- sprintf("LIBNAME out '%s';", tools::file_path_as_absolute("."))
+
+  # re-write the infile line to use previously set filename
+  infile_line <- which(grepl("^INFILE", sas_foreign))
+  sas_foreign[infile_line] <- "INFILE in"
 
   # correct the {foreign} script by adding informats for the time fields
   # get names of time fields
@@ -159,19 +167,22 @@ roe_get_redcap_sas_export <- function(
   sas_labeling <- c(sas_labeling, "run;")
 
   # sas code to export the sas data set to file named <filename>.sas7bdat
+  # libname out was inserted at beginning of script
   sas_export <- c(
-    sprintf("libname out '%s';", gsub("/", "\\\\", getwd())),
     sprintf("data out.%s;", filename),
     "set rdata;",
     "run;"
   )
 
-  # collate the sas code blocks to a file and run in sas batch mode
+  # collate the sas code blocks to a file
   sas_foreign_with_labeling <- c(sas_foreign, "", sas_labeling, "", sas_export)
   writeLines(sas_foreign_with_labeling, sas_filename)
+
+  # if sas executable located on system, run the script to produce the data file
   sas_path <- Sys.which("sas")[[1]]
   if(sas_path != "") {
-    message(sprintf("Running SAS script using %s.", sas_path))
+    message(sprintf("SAS executable found at %s.", sas_path))
+    message(sprintf("Running %s in SAS to produce the SAS data file.", sas_filename))
     shell(
       sprintf(
         "sas -SYSIN %s -linesize %s -pagesize %s",
@@ -181,6 +192,7 @@ roe_get_redcap_sas_export <- function(
       )
     )
   } else {
-    message("SAS not found on current system.")
+    message("SAS executable not found on system path.")
+    message(sprintf("Run %s in SAS to produce the SAS data file.", sas_filename))
   }
 }

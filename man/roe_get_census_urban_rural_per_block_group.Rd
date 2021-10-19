@@ -13,12 +13,15 @@ roe_get_census_urban_rural_per_block_group(
 \arguments{
 \item{state_fips_code}{Two-digit state code (e.g., "01" == "Alabama").}
 
-\item{vintage}{= Year of dataset, e.g., 2000. This data is only collected during decennial censuses.}
+\item{vintage}{= Year of dataset, e.g., 2000. This data is only collected
+during decennial censuses.}
 
-\item{key}{= Your Census API key, requested using \url{https://api.census.gov/data/key_signup.html}.}
+\item{key}{= Your Census API key, requested using
+\url{https://api.census.gov/data/key_signup.html}.}
 }
 \value{
-A tibble with FIPS codes and P2 variables by tract group for the desired state.
+A tibble with FIPS codes and P2 variables by tract group for the
+desired state.
 }
 \description{
 Retrieve Urban and Rural (p2) Summary File 1 (sf1) Census data
@@ -45,14 +48,19 @@ roe_get_census_urban_rural_per_block_group("29")
 
 ## data for all block groups
 fips_codes_for_states_and_dc \%>\%
-  mutate(data = purrr::map(state_fips_code, roe_get_census_urban_rural_per_block_group)) \%>\%
+  mutate(data = purrr::map(
+    state_fips_code,
+    roe_get_census_urban_rural_per_block_group
+  )) \%>\%
   tidyr::unnest(cols = c(data))
 
 ## compute percents urban and rural for each Missouri block group
 roe_get_census_urban_rural_per_block_group("29") \%>\%
   mutate(
-    cen_bgrp_pct_urban_2010 = 100 * cen_bgrp_pop_urban_2010 / cen_bgrp_pop_total_2010,
-    cen_bgrp_pct_rural_2010 = 100 * cen_bgrp_pop_rural_2010 / cen_bgrp_pop_total_2010
+    cen_bgrp_pct_urban_2010 =
+      100 * cen_bgrp_pop_urban_2010 / cen_bgrp_pop_total_2010,
+    cen_bgrp_pct_rural_2010 =
+      100 * cen_bgrp_pop_rural_2010 / cen_bgrp_pop_total_2010
   )
 }
 

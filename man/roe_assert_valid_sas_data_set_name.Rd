@@ -21,5 +21,7 @@ roe_assert_valid_sas_data_set_name("0 bad name")
 
 }
 \references{
-SAS Institute Inc. (1999). Rules for words and names: Names in the SAS language. Retrieved September 30, 2021, from \url{https://v8doc.sas.com/sashtml/lgref/z1031056.htm}.
+SAS Institute Inc. (1999). Rules for words and names: Names in the SAS
+language. Retrieved September 30, 2021, from
+\url{https://v8doc.sas.com/sashtml/lgref/z1031056.htm}.
 }

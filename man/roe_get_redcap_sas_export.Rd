@@ -6,7 +6,7 @@
 \usage{
 roe_get_redcap_sas_export(
   token,
-  filename = "roe_redcap_sas_export",
+  filename = roe_timestamp_filename("roe_redcap_sas_export"),
   redcap_uri = "https://redcap.wustl.edu/redcap/api/",
   linesize = 78,
   pagesize = 60
@@ -37,9 +37,9 @@ produce the desired sas7bdat file.
 \examples{
 \dontrun{
 token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-roe_get_redcap_sas_export(token, "static")
+roe_get_redcap_sas_export(token, roe_timestamp_filename("static"))
 
 token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
-roe_get_redcap_sas_export(token, "mother")
+roe_get_redcap_sas_export(token, roe_timestamp_filename("mother"))
 }
 }

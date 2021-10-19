@@ -1,4 +1,3 @@
-
 #' Geocode a single address
 #'
 #' @param street,city,state,postal_code address components

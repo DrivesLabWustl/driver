@@ -10,9 +10,11 @@ roe_get_census_urban_rural_per_zip_code_tabulation_area(
 )
 }
 \arguments{
-\item{vintage}{= Year of dataset, e.g., 2000. This data is only collected during decennial censuses.}
+\item{vintage}{= Year of dataset, e.g., 2000. This data is only collected
+during decennial censuses.}
 
-\item{key}{= Your Census API key, requested using \url{https://api.census.gov/data/key_signup.html}.}
+\item{key}{= Your Census API key, requested using
+\url{https://api.census.gov/data/key_signup.html}.}
 }
 \value{
 A tibble with P2 variables by zip code tabulation area.
@@ -43,8 +45,10 @@ roe_get_census_urban_rural_per_zip_code_tabulation_area()
 ## compute percents urban and rural for each zip code tabulation area
 roe_get_census_urban_rural_per_zip_code_tabulation_area() \%>\%
   mutate(
-    cen_zcta_pct_urban_2010 = 100 * cen_zcta_pop_urban_2010 / cen_zcta_pop_total_2010,
-    cen_zcta_pct_rural_2010 = 100 * cen_zcta_pop_rural_2010 / cen_zcta_pop_total_2010
+    cen_zcta_pct_urban_2010 =
+      100 * cen_zcta_pop_urban_2010 / cen_zcta_pop_total_2010,
+    cen_zcta_pct_rural_2010 =
+      100 * cen_zcta_pop_rural_2010 / cen_zcta_pop_total_2010
   )
 }
 
