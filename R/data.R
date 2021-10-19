@@ -1,6 +1,3 @@
-#' @importFrom tibble tibble
-NULL
-
 #' Federal Information Processing Standards (FIPS) codes for all states and DC.
 #'
 #' Federal Information Processing Standards (FIPS) codes for all states and DC.

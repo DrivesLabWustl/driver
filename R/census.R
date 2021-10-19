@@ -55,17 +55,17 @@ roe_get_census_urban_rural_per_block_group <- function(
     regionin = sprintf("state:%s county:*", state_fips_code)
   ) %>%
     dplyr::rename(
-      !!paste0("cen_bgrp_state_",     vintage) := state,
-      !!paste0("cen_bgrp_county_",    vintage) := county,
-      !!paste0("cen_bgrp_tract_",     vintage) := tract,
-      !!paste0("cen_bgrp_bgrp_",      vintage) := block_group,
-      !!paste0("cen_bgrp_geoid_",     vintage) := GEO_ID,
-      !!paste0("cen_bgrp_name_",      vintage) := NAME,
-      !!paste0("cen_bgrp_pop_total_", vintage) := P002001,
-      !!paste0("cen_bgrp_pop_urban_", vintage) := P002002,
-      !!paste0("cen_bgrp_pop_uarea_", vintage) := P002003,
-      !!paste0("cen_bgrp_pop_uclst_", vintage) := P002004,
-      !!paste0("cen_bgrp_pop_rural_", vintage) := P002005
+      !!paste0("cen_bgrp_state_",     vintage) := .data$state,
+      !!paste0("cen_bgrp_county_",    vintage) := .data$county,
+      !!paste0("cen_bgrp_tract_",     vintage) := .data$tract,
+      !!paste0("cen_bgrp_bgrp_",      vintage) := .data$block_group,
+      !!paste0("cen_bgrp_geoid_",     vintage) := .data$GEO_ID,
+      !!paste0("cen_bgrp_name_",      vintage) := .data$NAME,
+      !!paste0("cen_bgrp_pop_total_", vintage) := .data$P002001,
+      !!paste0("cen_bgrp_pop_urban_", vintage) := .data$P002002,
+      !!paste0("cen_bgrp_pop_uarea_", vintage) := .data$P002003,
+      !!paste0("cen_bgrp_pop_uclst_", vintage) := .data$P002004,
+      !!paste0("cen_bgrp_pop_rural_", vintage) := .data$P002005
     )
 }
 
@@ -118,13 +118,13 @@ roe_get_census_urban_rural_per_zip_code_tabulation_area <- function(
     region = "zip code tabulation area:*"
   ) %>%
     dplyr::rename(
-      !!paste0("cen_zcta_zcta_",      vintage) := zip_code_tabulation_area,
-      !!paste0("cen_zcta_geoid_",     vintage) := GEO_ID,
-      !!paste0("cen_zcta_name_",      vintage) := NAME,
-      !!paste0("cen_zcta_pop_total_", vintage) := P002001,
-      !!paste0("cen_zcta_pop_urban_", vintage) := P002002,
-      !!paste0("cen_zcta_pop_uarea_", vintage) := P002003,
-      !!paste0("cen_zcta_pop_uclst_", vintage) := P002004,
-      !!paste0("cen_zcta_pop_rural_", vintage) := P002005
+      !!paste0("cen_zcta_zcta_",      vintage) := .data$zip_code_tabulation_area,
+      !!paste0("cen_zcta_geoid_",     vintage) := .data$GEO_ID,
+      !!paste0("cen_zcta_name_",      vintage) := .data$NAME,
+      !!paste0("cen_zcta_pop_total_", vintage) := .data$P002001,
+      !!paste0("cen_zcta_pop_urban_", vintage) := .data$P002002,
+      !!paste0("cen_zcta_pop_uarea_", vintage) := .data$P002003,
+      !!paste0("cen_zcta_pop_uclst_", vintage) := .data$P002004,
+      !!paste0("cen_zcta_pop_rural_", vintage) := .data$P002005
     )
 }

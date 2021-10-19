@@ -10,6 +10,8 @@ Development](https://img.shields.io/badge/status-under%20development-red.svg)](h
 [![Last
 Commit](https://img.shields.io/github/last-commit/RoeLabWustl/roelabr.svg)](https://github.com/RoeLabWustl/roelabr/commits/master)
 [![R-CMD-check](https://github.com/RoeLabWustl/roelabr/workflows/R-CMD-check/badge.svg)](https://github.com/RoeLabWustl/roelabr/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/RoeLabWustl/roelabr/branch/main/graph/badge.svg)](https://codecov.io/gh/RoeLabWustl/roelabr?branch=main)
 <!-- badges: end -->
 
 ## Overview

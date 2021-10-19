@@ -15,6 +15,6 @@ roe_get_drug_codes <- function(drug_name) {
     httr::GET() %>%
     httr::content() %>%
     readr::read_delim(delim = "\t", col_names = FALSE, col_types = "cc") %>%
-    dplyr::rename(drug_code = X1, drug_name = X2) %>%
-    dplyr::mutate(drug_code = stringr::str_replace(drug_code, "^dr:D", "d"))
+    dplyr::rename(drug_code = .data$X1, drug_name = .data$X2) %>%
+    dplyr::mutate(drug_code = sub("^dr:D", "d", .data$drug_code))
 }

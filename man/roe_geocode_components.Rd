@@ -4,21 +4,29 @@
 \alias{roe_geocode_components}
 \title{Geocode a single address}
 \usage{
-roe_geocode_components(street, city, state, fivedigzipcode, ...)
+roe_geocode_components(
+  street,
+  city,
+  state,
+  postal_code,
+  fields = "census2010",
+  ...
+)
 }
 \arguments{
-\item{street}{address components}
+\item{street, city, state, postal_code}{address components}
 
-\item{city}{address components}
+\item{fields}{vector of additional fields to return with query results. Note
+that these count as extra lookups and impact your dailu quota/costs. See
+[the official documentation](https://geocod.io/docs/#fields) for more
+information on costs/pricing.}
 
-\item{state}{address components}
+\item{...}{additional arguments passed to
+[rgeocodio::gio_geocode_components()]}
+}
+\value{
+a [tibble::tibble()] containing geocodio data per the request
 }
 \description{
-\strong{You can also geocode intersections.} Just specify the two streets that you want to
-geocode in your query.
-}
-\examples{
-gio_geocode_components("1109 N Highland St", "Arlington", "VA")
-gio_geocode_components("1109 N Highland St", "Arlington", "VA",
-                       fields=c("census", "stateleg"))
+Geocode a single address
 }

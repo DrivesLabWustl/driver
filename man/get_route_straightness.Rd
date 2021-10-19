@@ -21,10 +21,12 @@ get_route_straightness(
 
 \item{End_Longitude}{longitude coordinate for ending location}
 
-\item{Distance_Travelled}{distance travelled. Measured by Azuga chip. Units in Miles.}
+\item{Distance_Travelled}{distance travelled. Measured by Azuga chip. Units
+in Miles.}
 }
 \value{
-straightness The straightness index. A value between 0 and 1 that indicates route straightness
+straightness The straightness index. A value between 0 and 1 that
+indicates route straightness
 }
 \description{
 Calculate Route Straightness

@@ -46,23 +46,23 @@ roe_get_redcap_sas_export <- function(
     httr::content() %>%
     dplyr::mutate(
       # strip double quotes
-      field_label = gsub("\"", "", field_label),
+      field_label = gsub("\"", "", .data$field_label),
       # double up single quotes
-      field_label = gsub("'", "''", field_label),
+      field_label = gsub("'", "''", .data$field_label),
       # strip html tags
-      field_label = gsub("<.*?>", "", field_label),
+      field_label = gsub("<.*?>", "", .data$field_label),
       # replace new lines with space
-      field_label = gsub("\n", " ", field_label),
+      field_label = gsub("\n", " ", .data$field_label),
       # trim any leading or trailing whitespace
-      field_label = trimws(field_label)
+      field_label = trimws(.data$field_label)
     ) %>%
     # descriptive fields are not labeled
-    dplyr::filter(field_type != "descriptive") -> tbl_data_dictionary
+    dplyr::filter(.data$field_type != "descriptive") -> tbl_data_dictionary
 
   # get names of note fields to later escape newline characters
   tbl_data_dictionary %>%
-    dplyr::filter(field_type == "notes") %>%
-    dplyr::pull(field_name) -> note_field_names
+    dplyr::filter(.data$field_type == "notes") %>%
+    dplyr::pull(.data$field_name) -> note_field_names
 
   # download data to local csv and make initial sas import code with {foreign}
   REDCapR::redcap_read(
@@ -89,8 +89,8 @@ roe_get_redcap_sas_export <- function(
   # correct the {foreign} script by adding informats for the time fields
   # get names of time fields
   tbl_data_dictionary %>%
-    filter(text_validation_type_or_show_slider_number == "time") %>%
-    pull(field_name) -> time_field_names
+    dplyr::filter(.data$text_validation_type_or_show_slider_number == "time") %>%
+    dplyr::pull(.data$field_name) -> time_field_names
 
   # determine line positions of the existing {foreign} INFORMAT statement
   informat_start <- which(grepl("INFORMAT", sas_foreign))

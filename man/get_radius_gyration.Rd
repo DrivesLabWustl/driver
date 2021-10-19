@@ -11,22 +11,34 @@ get_radius_gyration(
 )
 }
 \arguments{
-\item{DF}{The dataframe that contains all trips that you want to calculate the radius of gyration for}
+\item{DF}{The dataframe that contains all trips that you want to calculate
+the radius of gyration for}
 
-\item{Latitude_Name}{Character string of the column name in DF that has the trip end latitude location}
+\item{Latitude_Name}{Character string of the column name in DF that has the
+trip end latitude location}
 
-\item{Longitude_Name}{Character string of the column name in DF that has the trip end longitude location}
+\item{Longitude_Name}{Character string of the column name in DF that has the
+trip end longitude location}
 }
 \value{
-Rg a single numeric value that gives the radius of gyration for the supplied dataframe in kilometers
+Rg a single numeric value that gives the radius of gyration for the
+ supplied dataframe in kilometers
 }
 \description{
 Calculate Radius of Gyration
 }
 \examples{
 \dontrun{
-DF <- data.frame("MapID" = c(68771, 68771, 69876), "Trip_End_Latitude" = c(38.88768, 38.606689, 40.23523), "Trip_End_Longitude" = c(99.6986, 97.76478, 98.56789))
-get_radius_gyration(DF[DF$MapID == 68771,], "Trip_End_Latitude", "Trip_End_Longitude")
+DF <- data.frame(
+  "MapID" = c(68771, 68771, 69876),
+  "Trip_End_Latitude" = c(38.88768, 38.606689, 40.23523),
+  "Trip_End_Longitude" = c(99.6986, 97.76478, 98.56789)
+)
+get_radius_gyration(
+  DF[DF$MapID == 68771,],
+  "Trip_End_Latitude",
+  "Trip_End_Longitude"
+)
 }
 
 }

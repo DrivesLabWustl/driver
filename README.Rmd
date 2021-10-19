@@ -53,6 +53,7 @@ sticker(subplot = paste0("man/figures/", params$package, "_logo.png"),
 [![Under Development](https://img.shields.io/badge/status-under%20development-red.svg)](https://github.com/`r params$github`/`r params$package`)
 [![Last Commit](https://img.shields.io/github/last-commit/`r params$github`/`r params$package`.svg)](https://github.com/`r params$github`/`r params$package`/commits/master)
 [![R-CMD-check](https://github.com/RoeLabWustl/roelabr/workflows/R-CMD-check/badge.svg)](https://github.com/RoeLabWustl/roelabr/actions)
+[![Codecov test coverage](https://codecov.io/gh/RoeLabWustl/roelabr/branch/main/graph/badge.svg)](https://codecov.io/gh/RoeLabWustl/roelabr?branch=main)
 <!-- badges: end -->
 
 ## Overview

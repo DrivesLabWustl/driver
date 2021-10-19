@@ -21,16 +21,22 @@ LazyData: true
 URL: https://github.com/RoeLabWustl/roelabr
 BugReports: https://github.com/RoeLabWustl/roelabr/issues
 Depends:
-    dplyr,
     R (>= 2.10)
-Imports: 
+Imports:
+    dplyr,
     foreign,
     httr,
     REDCapR,
     pracma,
     readr,
     censusapi,
-    rgeocodio
+    rgeocodio,
+    magrittr,
+    rlang
 Remotes:
     hrbrmstr/rgeocodio
 RoxygenNote: 7.1.1
+Suggests: 
+    covr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
