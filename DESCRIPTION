@@ -32,7 +32,8 @@ Imports:
     censusapi,
     rgeocodio,
     magrittr,
-    rlang
+    rlang,
+    checkmate
 Remotes:
     hrbrmstr/rgeocodio
 RoxygenNote: 7.1.1

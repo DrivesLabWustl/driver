@@ -196,3 +196,221 @@ roe_get_redcap_sas_export <- function(
     message(sprintf("Run %s in SAS to produce the SAS data file.", sas_filename))
   }
 }
+
+
+
+#' REDCap Array
+#'
+#' @param name name of the array
+#' @param values values to be included in the array
+#'
+#' @return an object of class "redcap_array"
+#' @export
+#'
+#' @examples
+#' ## records array for three records from static
+#' redcap_array("records", c(16227, 16342, 16419))
+#'
+#' ## fields array for two fields from static
+#' redcap_array("fields", c("chip1_install_date", "chip2_install_date"))
+#'
+#' ## events array for one event from mother
+#' redcap_array("events", "baseline_arm_1")
+redcap_array <- function(name, values) {
+  a <- as.list(values)
+  names(a) <- sprintf("%s[%i]", name, 0:(length(values)-1))
+  class(a) <- "redcap_array"
+  return(a)
+}
+
+
+
+#' REDCap Logical
+#'
+#' @param x R logical to cast as REDCap API logical
+#'
+#' @return an R logical represented as a named list of lowercase character
+#'
+#' @examples
+#' \dontrun{
+#' a <- TRUE
+#' redcap_logical(a)
+#'
+#' b <- FALSE
+#' redcap_logical(b)
+#'
+#' c <- "not gonna work"
+#' redcap_logical(c)
+#' }
+redcap_logical <- function(x) {
+  checkmate::assert(checkmate::test_logical(x))
+  n <- deparse(substitute(x))
+  x <- as.list(tolower(as.character(x)))
+  names(x) <- n
+  return(x)
+}
+
+
+
+#' Export REDCap Project XML
+#'
+#' @description The entire project (all records, events, arms, instruments,
+#' fields, and project attributes) can be downloaded as a single XML file, which
+#'  is in CDISC ODM format (ODM version 1.3.1). This XML file can be used to
+#'  create a clone of the project (including its data, optionally) on this
+#'  REDCap server or on another REDCap server (it can be uploaded on the Create
+#'  New Project page). Because it is in CDISC ODM format, it can also be used to
+#'   import the project into another ODM-compatible system. NOTE: All the option
+#'    paramters listed below ONLY apply to data returned if the
+#'    'returnMetadataOnly' parameter is set to FALSE (default). For this API
+#'    method, ALL metadata (all fields, forms, events, and arms) will always be
+#'    exported. Only the data returned can be filtered using the optional
+#'    parameters.
+#'
+#' Note about export rights: If the 'returnMetadataOnly' parameter is set to
+#' FALSE, then please be aware that Data Export user rights will be applied to
+#' any data returned from this API request. For example, if you have
+#' 'De-Identified' or 'Remove all tagged Identifier fields' data export rights,
+#' then some data fields *might* be removed and filtered out of the data set
+#' returned from the API. To make sure that no data is unnecessarily filtered
+#' out of your API request, you should have 'Full Data Set' export rights in the
+#'  project.
+#'
+#' @note To use this method, you must have API Export privileges in the project.
+#'
+#' @param token The API token specific to your REDCap project and username (each
+#'  token is unique to each user for each project). See the section on the
+#'  left-hand menu for obtaining a token for a given project.
+#' @param filename name of xml file to write results
+#' @param overwrite only overwrite existing filename if TRUE
+#' @param redcap_uri The URI (uniform resource identifier) of the REDCap
+#' project.
+#' @param returnMetadataOnly TRUE returns only metadata (all fields, forms,
+#' events, and arms), whereas FALSE returns all metadata and also data (and
+#' optionally filters the data according to any of the optional parameters
+#' provided in the request)
+#' @param records an array of record names specifying specific records you wish
+#' to pull (by default, all records are pulled)
+#' @param fields an array of field names specifying specific fields you wish to
+#' pull (by default, all fields are pulled)
+#' @param events an array of unique event names that you wish to pull records
+#' for - only for longitudinal projects
+#' @param returnFormat csv, json, xml - specifies the format of error messages.
+#' If you do not pass in this flag, it will select the default format for you
+#' passed based on the 'format' flag you passed in or if no format flag was
+#' passed in, it will default to 'xml'.
+#' @param exportSurveyFields specifies whether or not to export the survey
+#' identifier field (e.g., 'redcap_survey_identifier') or survey timestamp
+#' fields (e.g., instrument+'_timestamp') when surveys are utilized in the
+#' project. If you do not pass in this flag, it will default to 'false'. If set
+#' to 'true', it will return the redcap_survey_identifier field and also the
+#' survey timestamp field for a particular survey when at least one field from
+#' that survey is being exported. NOTE: If the survey identifier field or survey
+#'  timestamp fields are imported via API data import, they will simply be
+#'  ignored since they are not real fields in the project but rather are
+#'  pseudo-fields.
+#' @param exportDataAccessGroups specifies whether or not to export the
+#' 'redcap_data_access_group' field when data access groups are utilized in the
+#' project. If you do not pass in this flag, it will default to 'false'. NOTE:
+#' This flag is only viable if the user whose token is being used to make the
+#' API request is *not* in a data access group. If the user is in a group, then
+#' this flag will revert to its default value.
+#' @param filterLogic String of logic text (e.g., [age] > 30) for filtering the
+#' data to be returned by this API method, in which the API will only return the
+#'  records (or record-events, if a longitudinal project) where the logic
+#'  evaluates as TRUE. This parameter is blank/null by default unless a value is
+#'   supplied. Please note that if the filter logic contains any incorrect
+#'   syntax, the API will respond with an error message.
+#' @param exportFiles TRUE will cause the XML returned to include all files
+#' uploaded for File Upload and Signature fields for all records in the project,
+#'  whereas FALSE will cause all such fields not to be included. NOTE: Setting
+#'  this option to TRUE can make the export very large and may prevent it from
+#'  completing if the project contains many files or very large files.
+#'
+#' @return A httr::response object.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ## full export from static
+#' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
+#' roe_get_redcap_project_xml(
+#'   token,
+#'   roe_timestamp_filename("static"),
+#'   exportFiles = TRUE
+#' )
+#'
+#' ## full export from mother
+#' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
+#' roe_get_redcap_project_xml(
+#'   token,
+#'   roe_timestamp_filename("mother"),
+#'   exportFiles = TRUE
+#' )
+#'
+#' ## one record and two fields from static
+#' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
+#' roe_get_redcap_project_xml(
+#'   token,
+#'   roe_timestamp_filename("partial_static"),
+#'   records = redcap_array("records", 16227),
+#'   fields = redcap_array("fields", c("id", "updatedate"))
+#' )
+#' }
+roe_get_redcap_project_xml <- function(
+  token,
+  filename = roe_timestamp_filename("roe_redcap_project_xml"),
+  overwrite = FALSE,
+  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
+  returnMetadataOnly = FALSE,
+  records,
+  fields,
+  events,
+  returnFormat = c("xml", "json", "csv"),
+  exportSurveyFields = FALSE,
+  exportDataAccessGroups = FALSE,
+  filterLogic = NULL,
+  exportFiles = FALSE
+) {
+  filename <- paste0(filename, ".xml")
+
+  body <- list(token = token, content = "project_xml")
+
+  returnMetadataOnly <- redcap_logical(returnMetadataOnly)
+  body <- append(body, returnMetadataOnly)
+
+  if(missing(records))
+    records <- NULL
+  else
+    checkmate::assert(checkmate::check_class(records, "redcap_array"))
+  body <- append(body, records)
+
+  if(missing(fields))
+    fields <- NULL
+  else
+    checkmate::assert(checkmate::check_class(fields, "redcap_array"))
+  body <- append(body, fields)
+
+  if(missing(events))
+    events <- NULL
+  else
+    checkmate::assert(checkmate::check_class(events, "redcap_array"))
+  body <- append(body, events)
+
+  returnFormat <- list(returnFormat = match.arg(returnFormat))
+  body <- append(body, returnFormat)
+
+  exportSurveyFields <- redcap_logical(exportSurveyFields)
+  body <- append(body, exportSurveyFields)
+
+  exportDataAccessGroups <- redcap_logical(exportDataAccessGroups)
+  body <- append(body, exportDataAccessGroups)
+
+  if(!is.null(filterLogic)) filterLogic <- list(filterLogic = filterLogic)
+  body <- append(body, filterLogic)
+
+  exportFiles <- redcap_logical(exportFiles)
+  body <- append(body, exportFiles)
+
+  httr::POST(redcap_uri, httr::write_disk(filename, overwrite), body = body)
+}
