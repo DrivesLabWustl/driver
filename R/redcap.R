@@ -1,4 +1,57 @@
-#' Export Full REDCap Databases to SAS
+#' REDCap Array
+#'
+#' @param name name of the array
+#' @param values values to be included in the array
+#'
+#' @return an object of class "redcap_array"
+#' @export
+#'
+#' @examples
+#' ## records array for three records from static
+#' redcap_array("records", c(16227, 16342, 16419))
+#'
+#' ## fields array for two fields from static
+#' redcap_array("fields", c("chip1_install_date", "chip2_install_date"))
+#'
+#' ## events array for one event from mother
+#' redcap_array("events", "baseline_arm_1")
+redcap_array <- function(name, values) {
+  a <- as.list(values)
+  names(a) <- sprintf("%s[%i]", name, 0:(length(values)-1))
+  class(a) <- "redcap_array"
+  return(a)
+}
+
+
+
+#' REDCap Logical
+#'
+#' @param x R logical to cast as REDCap API logical
+#'
+#' @return an R logical represented as a named list of lowercase character
+#'
+#' @examples
+#' \dontrun{
+#' a <- TRUE
+#' redcap_logical(a)
+#'
+#' b <- FALSE
+#' redcap_logical(b)
+#'
+#' c <- "not gonna work"
+#' redcap_logical(c)
+#' }
+redcap_logical <- function(x) {
+  checkmate::assert(checkmate::test_logical(x))
+  n <- deparse(substitute(x))
+  x <- as.list(tolower(as.character(x)))
+  names(x) <- n
+  return(x)
+}
+
+
+
+#' Export Full REDCap Database to SAS
 #'
 #' @description The SAS export capability of REDCap v9.5 is broken such that the
 #'  generated SAS script has voluminous syntactical errors. This function
@@ -21,12 +74,12 @@
 #' @examples
 #' \dontrun{
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_get_redcap_sas_export(token, roe_timestamp_filename("static"))
+#' roe_redcap_export_records_sas(token, roe_timestamp_filename("static"))
 #'
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
-#' roe_get_redcap_sas_export(token, roe_timestamp_filename("mother"))
+#' roe_redcap_export_records_sas(token, roe_timestamp_filename("mother"))
 #' }
-roe_get_redcap_sas_export <- function(
+roe_redcap_export_records_sas <- function(
   token,
   filename = roe_timestamp_filename("roe_redcap_sas_export"),
   redcap_uri = "https://redcap.wustl.edu/redcap/api/",
@@ -199,60 +252,7 @@ roe_get_redcap_sas_export <- function(
 
 
 
-#' REDCap Array
-#'
-#' @param name name of the array
-#' @param values values to be included in the array
-#'
-#' @return an object of class "redcap_array"
-#' @export
-#'
-#' @examples
-#' ## records array for three records from static
-#' redcap_array("records", c(16227, 16342, 16419))
-#'
-#' ## fields array for two fields from static
-#' redcap_array("fields", c("chip1_install_date", "chip2_install_date"))
-#'
-#' ## events array for one event from mother
-#' redcap_array("events", "baseline_arm_1")
-redcap_array <- function(name, values) {
-  a <- as.list(values)
-  names(a) <- sprintf("%s[%i]", name, 0:(length(values)-1))
-  class(a) <- "redcap_array"
-  return(a)
-}
-
-
-
-#' REDCap Logical
-#'
-#' @param x R logical to cast as REDCap API logical
-#'
-#' @return an R logical represented as a named list of lowercase character
-#'
-#' @examples
-#' \dontrun{
-#' a <- TRUE
-#' redcap_logical(a)
-#'
-#' b <- FALSE
-#' redcap_logical(b)
-#'
-#' c <- "not gonna work"
-#' redcap_logical(c)
-#' }
-redcap_logical <- function(x) {
-  checkmate::assert(checkmate::test_logical(x))
-  n <- deparse(substitute(x))
-  x <- as.list(tolower(as.character(x)))
-  names(x) <- n
-  return(x)
-}
-
-
-
-#' Export REDCap Project XML
+#' Export Entire Project as REDCap XML File (containing metadata & data)
 #'
 #' @description The entire project (all records, events, arms, instruments,
 #' fields, and project attributes) can be downloaded as a single XML file, which
@@ -334,7 +334,7 @@ redcap_logical <- function(x) {
 #' \dontrun{
 #' ## full export from static
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_get_redcap_project_xml(
+#' roe_redcap_export_project_xml(
 #'   token,
 #'   roe_timestamp_filename("static"),
 #'   exportFiles = TRUE
@@ -342,7 +342,7 @@ redcap_logical <- function(x) {
 #'
 #' ## full export from mother
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
-#' roe_get_redcap_project_xml(
+#' roe_redcap_export_project_xml(
 #'   token,
 #'   roe_timestamp_filename("mother"),
 #'   exportFiles = TRUE
@@ -350,14 +350,14 @@ redcap_logical <- function(x) {
 #'
 #' ## one record and two fields from static
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_get_redcap_project_xml(
+#' roe_redcap_export_project_xml(
 #'   token,
 #'   roe_timestamp_filename("partial_static"),
 #'   records = redcap_array("records", 16227),
 #'   fields = redcap_array("fields", c("id", "updatedate"))
 #' )
 #' }
-roe_get_redcap_project_xml <- function(
+roe_redcap_export_project_xml <- function(
   token,
   filename = roe_timestamp_filename("roe_redcap_project_xml"),
   overwrite = FALSE,
@@ -413,4 +413,57 @@ roe_get_redcap_project_xml <- function(
   body <- append(body, exportFiles)
 
   httr::POST(redcap_uri, httr::write_disk(filename, overwrite), body = body)
+}
+
+
+
+#' Delete Records
+#'
+#' @param token The API token specific to your REDCap project and username (each
+#'  token is unique to each user for each project). See the section on the
+#'  left-hand menu for obtaining a token for a given project.
+#' @param records an array of record names specifying specific records you wish
+#' to delete
+#' @param arm the arm number of the arm in which the record(s) should be
+#' deleted. (This can only be used if the project is longitudinal with more than
+#'  one arm.) NOTE: If the arm parameter is not provided, the specified records
+#'  will be deleted from all arms in which they exist. Whereas, if arm is
+#'  provided, they will only be deleted from the specified arm.
+#' @param redcap_uri The URI (uniform resource identifier) of the REDCap
+#' project.
+#'
+#' @return A httr::response object containing the number of records deleted.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ## delete two records from static
+#' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
+#' roe_redcap_delete_records(
+#'   token,
+#'   records = redcap_array("records", c(16227, 16342),
+#' )
+#' }
+roe_redcap_delete_records <- function(
+  token,
+  records,
+  arm,
+  redcap_uri = "https://redcap.wustl.edu/redcap/api/"
+) {
+  body <- list(
+    token = token,
+    action = "delete",
+    content = "record"
+  )
+
+  checkmate::assert(checkmate::check_class(records, "redcap_array"))
+  body <- append(body, records)
+
+  if(missing(arm))
+    arm <- NULL
+  else
+    checkmate::assert(checkmate::check_integer(arm))
+  body <- append(body, list(arm = arm))
+
+  httr::POST(redcap_uri, body = body)
 }
