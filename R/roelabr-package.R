@@ -1,7 +1,7 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom rlang :=
 #' @importFrom rlang .data
 
