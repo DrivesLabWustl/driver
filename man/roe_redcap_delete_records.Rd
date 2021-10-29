@@ -40,7 +40,7 @@ Delete Records
 token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
 roe_redcap_delete_records(
   token,
-  records = redcap_array("records", c(16227, 16342),
+  records = redcap_array("records", c(16227, 16342))
 )
 }
 }

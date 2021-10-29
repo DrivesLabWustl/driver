@@ -79,193 +79,202 @@ redcap_logical <- function(name, value) {
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
 #' roe_redcap_export_records_sas(token, roe_timestamp_filename("mother"))
 #' }
-roe_redcap_export_records_sas <- function(
-  token,
-  filename = roe_timestamp_filename("roe_redcap_sas_export"),
-  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
-  linesize = 78,
-  pagesize = 60
-) {
-  # check and prepare file names
-  roe_valid_sas_data_set_name(filename)
-  csv_filename <- sprintf("%s.csv", filename)
-  sas_filename <- sprintf("%s.sas", filename)
+roe_redcap_export_records_sas <-
+  function(token,
+           filename = roe_timestamp_filename("roe_redcap_sas_export"),
+           redcap_uri = "https://redcap.wustl.edu/redcap/api/",
+           linesize = 78,
+           pagesize = 60) {
+    # check and prepare file names
+    roe_valid_sas_data_set_name(filename)
+    csv_filename <- sprintf("%s.csv", filename)
+    sas_filename <- sprintf("%s.sas", filename)
 
-  # download the data dictionary
-  httr::POST(
-    redcap_uri,
-    body = list(token = token, content = "metadata", format = "csv")
-  ) %>%
-    httr::content() %>%
-    dplyr::mutate(
-      # strip double quotes
-      field_label = gsub("\"", "", .data$field_label),
-      # double up single quotes
-      field_label = gsub("'", "''", .data$field_label),
-      # strip html tags
-      field_label = gsub("<.*?>", "", .data$field_label),
-      # replace new lines with space
-      field_label = gsub("\n", " ", .data$field_label),
-      # trim any leading or trailing whitespace
-      field_label = trimws(.data$field_label)
+    # download the data dictionary
+    httr::POST(
+      redcap_uri,
+      body = list(token = token, content = "metadata", format = "csv")
     ) %>%
-    # descriptive fields are not labeled
-    dplyr::filter(.data$field_type != "descriptive") -> tbl_data_dictionary
+      httr::content() %>%
+      dplyr::mutate(
+        # strip double quotes
+        field_label = gsub("\"", "", .data$field_label),
+        # double up single quotes
+        field_label = gsub("'", "''", .data$field_label),
+        # strip html tags
+        field_label = gsub("<.*?>", "", .data$field_label),
+        # replace new lines with space
+        field_label = gsub("\n", " ", .data$field_label),
+        # trim any leading or trailing whitespace
+        field_label = trimws(.data$field_label)
+      ) %>%
+      # descriptive fields are not labeled
+      dplyr::filter(.data$field_type != "descriptive") -> tbl_data_dictionary
 
-  # get names of note fields to later escape newline characters
-  tbl_data_dictionary %>%
-    dplyr::filter(.data$field_type == "notes") %>%
-    dplyr::pull(.data$field_name) -> note_field_names
+    # get names of note fields to later escape newline characters
+    tbl_data_dictionary %>%
+      dplyr::filter(.data$field_type == "notes") %>%
+      dplyr::pull(.data$field_name) -> note_field_names
 
-  # download data to local csv and make initial sas import code with {foreign}
-  REDCapR::redcap_read(
-    redcap_uri = redcap_uri,
-    token = token
+    # download data to local csv and make initial sas import code with {foreign}
+    REDCapR::redcap_read(
+      redcap_uri = redcap_uri,
+      token = token
     ) %>%
-    `[[`("data") %>%
-    # drop instrument complete flag fields
-    dplyr::select(-dplyr::ends_with("_complete")) %>%
-    # escape newlines in note fields
-    dplyr::mutate(
-      dplyr::across(
-        dplyr::all_of(note_field_names),
-        ~ gsub("\n", "NEWLINE", .)
-      )
-    ) %>%
-    # {foreign} only works with dataframes not tibbles
-    as.data.frame() %>%
-    # write csv and sas code to disk
-    foreign::write.foreign(csv_filename, sas_filename, "SAS") #tidyverse::haven?
-  # read the outputted script into memory for editing
-  sas_foreign <- readLines(sas_filename)
+      `[[`("data") %>%
+      # drop instrument complete flag fields
+      dplyr::select(-dplyr::ends_with("_complete")) %>%
+      # escape newlines in note fields
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::all_of(note_field_names),
+          ~ gsub("\n", "NEWLINE", .)
+        )
+      ) %>%
+      # {foreign} only works with dataframes not tibbles
+      as.data.frame() %>%
+      # write csv and sas code to disk
+      foreign::write.foreign(
+        csv_filename,
+        sas_filename,
+        "SAS"
+      ) # tidyverse::haven?
+    # read the outputted script into memory for editing
+    sas_foreign <- readLines(sas_filename)
 
-  # overwrite {foreign} comments with a filename and libname statements
-  sas_foreign[1] <- sprintf(
-    "FILENAME in '%s';",
-    tools::file_path_as_absolute(csv_filename)
-  )
-  sas_foreign[2] <- sprintf(
-    "LIBNAME out '%s';",
-    tools::file_path_as_absolute(".")
-  )
+    # overwrite {foreign} comments with a filename and libname statements
+    sas_foreign[1] <- sprintf(
+      "FILENAME in '%s';",
+      tools::file_path_as_absolute(csv_filename)
+    )
+    sas_foreign[2] <- sprintf(
+      "LIBNAME out '%s';",
+      tools::file_path_as_absolute(".")
+    )
 
-  # re-write the infile line to use previously set filename
-  infile_line <- which(grepl("^INFILE", sas_foreign))
-  sas_foreign[infile_line] <- "INFILE in"
+    # re-write the infile line to use previously set filename
+    infile_line <- which(grepl("^INFILE", sas_foreign))
+    sas_foreign[infile_line] <- "INFILE in"
 
-  # correct the {foreign} script by adding informats for the time fields
-  # get names of time fields
-  tbl_data_dictionary %>%
-    dplyr::filter(
-      .data$text_validation_type_or_show_slider_number == "time"
-    ) %>%
-    dplyr::pull(.data$field_name) -> time_field_names
+    # correct the {foreign} script by adding informats for the time fields
+    # get names of time fields
+    tbl_data_dictionary %>%
+      dplyr::filter(
+        .data$text_validation_type_or_show_slider_number == "time"
+      ) %>%
+      dplyr::pull(.data$field_name) -> time_field_names
 
-  # determine line positions of the existing {foreign} INFORMAT statement
-  informat_start <- which(grepl("INFORMAT", sas_foreign))
-  informat_end <- which(
-    grepl(";", sas_foreign[informat_start:length(sas_foreign)])
-  )[1] + informat_start - 1
+    # determine line positions of the existing {foreign} INFORMAT statement
+    informat_start <- which(grepl("INFORMAT", sas_foreign))
+    informat_end <- which(
+      grepl(";", sas_foreign[informat_start:length(sas_foreign)])
+    )[1] + informat_start - 1
 
-  # insert a second INFORMAT statement for the time fields following the first
-  sas_foreign <- append(
-    sas_foreign,
-    c("",
-      "INFORMAT",
-      paste(" ", time_field_names),
-      " time8.",
-      ";"),
-    informat_end
-  )
+    # insert a second INFORMAT statement for the time fields following the first
+    sas_foreign <- append(
+      sas_foreign,
+      c(
+        "",
+        "INFORMAT",
+        paste(" ", time_field_names),
+        " time8.",
+        ";"
+      ),
+      informat_end
+    )
 
-  # insert a FORMAT statement for each time field at the end of the script
-  sas_foreign <- append(
-    sas_foreign,
-    paste("FORMAT", time_field_names, "time8.;"),
-    length(sas_foreign) - 1
-  )
+    # insert a FORMAT statement for each time field at the end of the script
+    sas_foreign <- append(
+      sas_foreign,
+      paste("FORMAT", time_field_names, "time8.;"),
+      length(sas_foreign) - 1
+    )
 
-  # make vector of sas label commands
-  sas_labeling <- c("data rdata;", "\tset rdata;")
-  # for each field in the data dictionary create one or more labeling commands
-  for (r in seq_len(nrow(tbl_data_dictionary))) {
-    .field_type <- tbl_data_dictionary$field_type[r]
-    .choices <- tbl_data_dictionary$select_choices_or_calculations[r]
-    .field_name <- tbl_data_dictionary$field_name[r]
-    .field_label <- tbl_data_dictionary$field_label[r]
+    # make vector of sas label commands
+    sas_labeling <- c("data rdata;", "\tset rdata;")
+    # for each field in the data dictionary create one or more labeling commands
+    for (r in seq_len(nrow(tbl_data_dictionary))) {
+      .field_type <- tbl_data_dictionary$field_type[r]
+      .choices <- tbl_data_dictionary$select_choices_or_calculations[r]
+      .field_name <- tbl_data_dictionary$field_name[r]
+      .field_label <- tbl_data_dictionary$field_label[r]
 
-    if (.field_type == "checkbox") {
-      # if fields was of type checkbox, need to add multiple label commands as
-      # there will be a field (with "___#" appended) for each checkbox option
-      .choices <- unlist(strsplit(.choices, "\\|"))
-      .choices_numb <- trimws(sub(",.*$", "", .choices))
-      .choices_text <- trimws(sub("^\\d+,", "", .choices))
+      if (.field_type == "checkbox") {
+        # if fields was of type checkbox, need to add multiple label commands as
+        # there will be a field (with "___#" appended) for each checkbox option
+        .choices <- unlist(strsplit(.choices, "\\|"))
+        .choices_numb <- trimws(sub(",.*$", "", .choices))
+        .choices_text <- trimws(sub("^\\d+,", "", .choices))
 
-      for (i in seq_len(length(.choices))) {
+        for (i in seq_len(length(.choices))) {
+          # make new command
+          .cmd <- sprintf(
+            "\tlabel %s___%s='%s (choice=%s)';",
+            .field_name,
+            .choices_numb[i],
+            .field_label,
+            .choices_text[i]
+          )
+          # append new command
+          sas_labeling <- c(sas_labeling, .cmd)
+        }
+      } else {
+        # else this field is not of type checkbox; no special processing needed
         # make new command
         .cmd <- sprintf(
-          "\tlabel %s___%s='%s (choice=%s)';",
+          "\tlabel %s='%s';",
           .field_name,
-          .choices_numb[i],
-          .field_label,
-          .choices_text[i]
+          .field_label
         )
         # append new command
         sas_labeling <- c(sas_labeling, .cmd)
       }
-    } else {
-      # else this field is not of type checkbox and no special processing needed
-      # make new command
-      .cmd <- sprintf(
-        "\tlabel %s='%s';",
-        .field_name,
-        .field_label
+    }
+    sas_labeling <- c(sas_labeling, "run;")
+
+    # sas code to export the sas data set to file named <filename>.sas7bdat
+    # libname out was inserted at beginning of script
+    sas_export <- c(
+      sprintf("data out.%s;", filename),
+      "set rdata;",
+      "run;"
+    )
+
+    # collate the sas code blocks to a file
+    sas_foreign_with_labeling <- c(
+      sas_foreign, "",
+      sas_labeling, "",
+      sas_export
+    )
+    writeLines(sas_foreign_with_labeling, sas_filename)
+
+    # if sas located on system, run the script to produce the data file
+    sas_path <- Sys.which("sas")[[1]]
+    if (sas_path != "") {
+      message(sprintf(
+        "SAS executable found at %s.",
+        sas_path
+      ))
+      message(sprintf(
+        "Running %s in SAS to produce the SAS data file.",
+        sas_filename
+      ))
+      shell(
+        sprintf(
+          "sas -SYSIN %s -linesize %s -pagesize %s",
+          sas_filename,
+          linesize,
+          pagesize
+        )
       )
-      # append new command
-      sas_labeling <- c(sas_labeling, .cmd)
+    } else {
+      message("SAS executable not found on system path.")
+      message(sprintf(
+        "Run %s in SAS to produce the SAS data file.",
+        sas_filename
+      ))
     }
   }
-  sas_labeling <- c(sas_labeling, "run;")
-
-  # sas code to export the sas data set to file named <filename>.sas7bdat
-  # libname out was inserted at beginning of script
-  sas_export <- c(
-    sprintf("data out.%s;", filename),
-    "set rdata;",
-    "run;"
-  )
-
-  # collate the sas code blocks to a file
-  sas_foreign_with_labeling <- c(sas_foreign, "", sas_labeling, "", sas_export)
-  writeLines(sas_foreign_with_labeling, sas_filename)
-
-  # if sas executable located on system, run the script to produce the data file
-  sas_path <- Sys.which("sas")[[1]]
-  if (sas_path != "") {
-    message(sprintf(
-      "SAS executable found at %s.",
-      sas_path
-    ))
-    message(sprintf(
-      "Running %s in SAS to produce the SAS data file.",
-      sas_filename
-    ))
-    shell(
-      sprintf(
-        "sas -SYSIN %s -linesize %s -pagesize %s",
-        sas_filename,
-        linesize,
-        pagesize
-      )
-    )
-  } else {
-    message("SAS executable not found on system path.")
-    message(sprintf(
-      "Run %s in SAS to produce the SAS data file.",
-      sas_filename
-    ))
-  }
-}
 
 
 
@@ -374,74 +383,77 @@ roe_redcap_export_records_sas <- function(
 #'   fields = redcap_array("fields", c("id", "updatedate"))
 #' )
 #' }
-roe_redcap_export_project_xml <- function(
-  token,
-  filename = roe_timestamp_filename("roe_redcap_project_xml"),
-  overwrite = FALSE,
-  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
-  return_metadata_only = FALSE,
-  records,
-  fields,
-  events,
-  return_format = c("xml", "json", "csv"),
-  export_survey_fields = FALSE,
-  export_data_access_groups = FALSE,
-  filter_logic = NULL,
-  export_files = FALSE
-) {
-  filename <- paste0(filename, ".xml")
+roe_redcap_export_project_xml <-
+  function(token,
+           filename = roe_timestamp_filename("roe_redcap_project_xml"),
+           overwrite = FALSE,
+           redcap_uri = "https://redcap.wustl.edu/redcap/api/",
+           return_metadata_only = FALSE,
+           records,
+           fields,
+           events,
+           return_format = c("xml", "json", "csv"),
+           export_survey_fields = FALSE,
+           export_data_access_groups = FALSE,
+           filter_logic = NULL,
+           export_files = FALSE) {
+    filename <- paste0(filename, ".xml")
 
-  body <- list(token = token, content = "project_xml")
+    body <- list(token = token, content = "project_xml")
 
-  body <- append(
-    body,
-    redcap_logical("returnMetadataOnly", return_metadata_only)
-  )
+    body <- append(
+      body,
+      redcap_logical("returnMetadataOnly", return_metadata_only)
+    )
 
-  if (missing(records))
-    records <- NULL
-  else
-    checkmate::assert(checkmate::check_class(records, "redcap_array"))
-  body <- append(body, records)
+    if (missing(records)) {
+      records <- NULL
+    } else {
+      checkmate::assert(checkmate::check_class(records, "redcap_array"))
+    }
+    body <- append(body, records)
 
-  if (missing(fields))
-    fields <- NULL
-  else
-    checkmate::assert(checkmate::check_class(fields, "redcap_array"))
-  body <- append(body, fields)
+    if (missing(fields)) {
+      fields <- NULL
+    } else {
+      checkmate::assert(checkmate::check_class(fields, "redcap_array"))
+    }
+    body <- append(body, fields)
 
-  if (missing(events))
-    events <- NULL
-  else
-    checkmate::assert(checkmate::check_class(events, "redcap_array"))
-  body <- append(body, events)
+    if (missing(events)) {
+      events <- NULL
+    } else {
+      checkmate::assert(checkmate::check_class(events, "redcap_array"))
+    }
+    body <- append(body, events)
 
-  body <- append(
-    body,
-    list("returnFormat" = match.arg(return_format))
-  )
+    body <- append(
+      body,
+      list("returnFormat" = match.arg(return_format))
+    )
 
-  body <- append(body, redcap_logical(
-    "exportSurveyFields",
-    export_survey_fields)
-  )
+    body <- append(body, redcap_logical(
+      "exportSurveyFields",
+      export_survey_fields
+    ))
 
-  body <- append(body, redcap_logical(
-    "exportDataAccessGroups",
-    export_data_access_groups)
-  )
+    body <- append(body, redcap_logical(
+      "exportDataAccessGroups",
+      export_data_access_groups
+    ))
 
-  if (!is.null(filter_logic))
-    filter_logic <- list("filterLogic" = filter_logic)
-  body <- append(body, filter_logic)
+    if (!is.null(filter_logic)) {
+      filter_logic <- list("filterLogic" = filter_logic)
+    }
+    body <- append(body, filter_logic)
 
-  body <- append(body, redcap_logical(
-    "exportFiles",
-    export_files)
-  )
+    body <- append(body, redcap_logical(
+      "exportFiles",
+      export_files
+    ))
 
-  httr::POST(redcap_uri, httr::write_disk(filename, overwrite), body = body)
-}
+    httr::POST(redcap_uri, httr::write_disk(filename, overwrite), body = body)
+  }
 
 
 
@@ -469,29 +481,29 @@ roe_redcap_export_project_xml <- function(
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
 #' roe_redcap_delete_records(
 #'   token,
-#'   records = redcap_array("records", c(16227, 16342),
+#'   records = redcap_array("records", c(16227, 16342))
 #' )
 #' }
-roe_redcap_delete_records <- function(
-  token,
-  records,
-  arm,
-  redcap_uri = "https://redcap.wustl.edu/redcap/api/"
-) {
-  body <- list(
-    token = token,
-    action = "delete",
-    content = "record"
-  )
+roe_redcap_delete_records <-
+  function(token,
+           records,
+           arm,
+           redcap_uri = "https://redcap.wustl.edu/redcap/api/") {
+    body <- list(
+      token = token,
+      action = "delete",
+      content = "record"
+    )
 
-  checkmate::assert(checkmate::check_class(records, "redcap_array"))
-  body <- append(body, records)
+    checkmate::assert(checkmate::check_class(records, "redcap_array"))
+    body <- append(body, records)
 
-  if  (missing(arm))
-    arm <- NULL
-  else
-    checkmate::assert(checkmate::check_integer(arm))
-  body <- append(body, list(arm = arm))
+    if (missing(arm)) {
+      arm <- NULL
+    } else {
+      checkmate::assert(checkmate::check_integer(arm))
+    }
+    body <- append(body, list(arm = arm))
 
-  httr::POST(redcap_uri, body = body)
-}
+    httr::POST(redcap_uri, body = body)
+  }
