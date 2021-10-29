@@ -17,7 +17,7 @@
 #' redcap_array("events", "baseline_arm_1")
 redcap_array <- function(name, values) {
   a <- as.list(values)
-  names(a) <- sprintf("%s[%i]", name, 0:(length(values)-1))
+  names(a) <- sprintf("%s[%i]", name, 0:(length(values) - 1))
   class(a) <- "redcap_array"
   return(a)
 }
@@ -26,27 +26,27 @@ redcap_array <- function(name, values) {
 
 #' REDCap Logical
 #'
-#' @param x R logical to cast as REDCap API logical
+#' @param name name to give logical
+#' @param value R logical to cast as REDCap API logical
 #'
 #' @return an R logical represented as a named list of lowercase character
 #'
 #' @examples
 #' \dontrun{
 #' a <- TRUE
-#' redcap_logical(a)
+#' redcap_logical("a", a)
 #'
 #' b <- FALSE
-#' redcap_logical(b)
+#' redcap_logical("b", b)
 #'
 #' c <- "not gonna work"
-#' redcap_logical(c)
+#' redcap_logical("c", c)
 #' }
-redcap_logical <- function(x) {
-  checkmate::assert(checkmate::test_logical(x))
-  n <- deparse(substitute(x))
-  x <- as.list(tolower(as.character(x)))
-  names(x) <- n
-  return(x)
+redcap_logical <- function(name, value) {
+  checkmate::assert(checkmate::test_logical(value))
+  value <- as.list(tolower(as.character(value)))
+  names(value) <- name
+  return(value)
 }
 
 
@@ -87,7 +87,7 @@ roe_redcap_export_records_sas <- function(
   pagesize = 60
 ) {
   # check and prepare file names
-  roe_assert_valid_sas_data_set_name(filename)
+  roe_valid_sas_data_set_name(filename)
   csv_filename <- sprintf("%s.csv", filename)
   sas_filename <- sprintf("%s.sas", filename)
 
@@ -140,8 +140,14 @@ roe_redcap_export_records_sas <- function(
   sas_foreign <- readLines(sas_filename)
 
   # overwrite {foreign} comments with a filename and libname statements
-  sas_foreign[1] <- sprintf("FILENAME in '%s';", tools::file_path_as_absolute(csv_filename))
-  sas_foreign[2] <- sprintf("LIBNAME out '%s';", tools::file_path_as_absolute("."))
+  sas_foreign[1] <- sprintf(
+    "FILENAME in '%s';",
+    tools::file_path_as_absolute(csv_filename)
+  )
+  sas_foreign[2] <- sprintf(
+    "LIBNAME out '%s';",
+    tools::file_path_as_absolute(".")
+  )
 
   # re-write the infile line to use previously set filename
   infile_line <- which(grepl("^INFILE", sas_foreign))
@@ -150,7 +156,9 @@ roe_redcap_export_records_sas <- function(
   # correct the {foreign} script by adding informats for the time fields
   # get names of time fields
   tbl_data_dictionary %>%
-    dplyr::filter(.data$text_validation_type_or_show_slider_number == "time") %>%
+    dplyr::filter(
+      .data$text_validation_type_or_show_slider_number == "time"
+    ) %>%
     dplyr::pull(.data$field_name) -> time_field_names
 
   # determine line positions of the existing {foreign} INFORMAT statement
@@ -180,20 +188,20 @@ roe_redcap_export_records_sas <- function(
   # make vector of sas label commands
   sas_labeling <- c("data rdata;", "\tset rdata;")
   # for each field in the data dictionary create one or more labeling commands
-  for(r in 1:nrow(tbl_data_dictionary)) {
+  for (r in seq_len(nrow(tbl_data_dictionary))) {
     .field_type <- tbl_data_dictionary$field_type[r]
     .choices <- tbl_data_dictionary$select_choices_or_calculations[r]
     .field_name <- tbl_data_dictionary$field_name[r]
     .field_label <- tbl_data_dictionary$field_label[r]
 
-    if(.field_type == "checkbox") {
+    if (.field_type == "checkbox") {
       # if fields was of type checkbox, need to add multiple label commands as
       # there will be a field (with "___#" appended) for each checkbox option
       .choices <- unlist(strsplit(.choices, "\\|"))
       .choices_numb <- trimws(sub(",.*$", "", .choices))
       .choices_text <- trimws(sub("^\\d+,", "", .choices))
 
-      for(i in 1:length(.choices)) {
+      for (i in seq_len(length(.choices))) {
         # make new command
         .cmd <- sprintf(
           "\tlabel %s___%s='%s (choice=%s)';",
@@ -233,9 +241,15 @@ roe_redcap_export_records_sas <- function(
 
   # if sas executable located on system, run the script to produce the data file
   sas_path <- Sys.which("sas")[[1]]
-  if(sas_path != "") {
-    message(sprintf("SAS executable found at %s.", sas_path))
-    message(sprintf("Running %s in SAS to produce the SAS data file.", sas_filename))
+  if (sas_path != "") {
+    message(sprintf(
+      "SAS executable found at %s.",
+      sas_path
+    ))
+    message(sprintf(
+      "Running %s in SAS to produce the SAS data file.",
+      sas_filename
+    ))
     shell(
       sprintf(
         "sas -SYSIN %s -linesize %s -pagesize %s",
@@ -246,7 +260,10 @@ roe_redcap_export_records_sas <- function(
     )
   } else {
     message("SAS executable not found on system path.")
-    message(sprintf("Run %s in SAS to produce the SAS data file.", sas_filename))
+    message(sprintf(
+      "Run %s in SAS to produce the SAS data file.",
+      sas_filename
+    ))
   }
 }
 
@@ -285,7 +302,7 @@ roe_redcap_export_records_sas <- function(
 #' @param overwrite only overwrite existing filename if TRUE
 #' @param redcap_uri The URI (uniform resource identifier) of the REDCap
 #' project.
-#' @param returnMetadataOnly TRUE returns only metadata (all fields, forms,
+#' @param return_metadata_only TRUE returns only metadata (all fields, forms,
 #' events, and arms), whereas FALSE returns all metadata and also data (and
 #' optionally filters the data according to any of the optional parameters
 #' provided in the request)
@@ -295,11 +312,11 @@ roe_redcap_export_records_sas <- function(
 #' pull (by default, all fields are pulled)
 #' @param events an array of unique event names that you wish to pull records
 #' for - only for longitudinal projects
-#' @param returnFormat csv, json, xml - specifies the format of error messages.
+#' @param return_format csv, json, xml - specifies the format of error messages.
 #' If you do not pass in this flag, it will select the default format for you
 #' passed based on the 'format' flag you passed in or if no format flag was
 #' passed in, it will default to 'xml'.
-#' @param exportSurveyFields specifies whether or not to export the survey
+#' @param export_survey_fields specifies whether or not to export the survey
 #' identifier field (e.g., 'redcap_survey_identifier') or survey timestamp
 #' fields (e.g., instrument+'_timestamp') when surveys are utilized in the
 #' project. If you do not pass in this flag, it will default to 'false'. If set
@@ -309,19 +326,19 @@ roe_redcap_export_records_sas <- function(
 #'  timestamp fields are imported via API data import, they will simply be
 #'  ignored since they are not real fields in the project but rather are
 #'  pseudo-fields.
-#' @param exportDataAccessGroups specifies whether or not to export the
+#' @param export_data_access_groups specifies whether or not to export the
 #' 'redcap_data_access_group' field when data access groups are utilized in the
 #' project. If you do not pass in this flag, it will default to 'false'. NOTE:
 #' This flag is only viable if the user whose token is being used to make the
 #' API request is *not* in a data access group. If the user is in a group, then
 #' this flag will revert to its default value.
-#' @param filterLogic String of logic text (e.g., [age] > 30) for filtering the
+#' @param filter_logic String of logic text (e.g., [age] > 30) for filtering the
 #' data to be returned by this API method, in which the API will only return the
 #'  records (or record-events, if a longitudinal project) where the logic
 #'  evaluates as TRUE. This parameter is blank/null by default unless a value is
 #'   supplied. Please note that if the filter logic contains any incorrect
 #'   syntax, the API will respond with an error message.
-#' @param exportFiles TRUE will cause the XML returned to include all files
+#' @param export_files TRUE will cause the XML returned to include all files
 #' uploaded for File Upload and Signature fields for all records in the project,
 #'  whereas FALSE will cause all such fields not to be included. NOTE: Setting
 #'  this option to TRUE can make the export very large and may prevent it from
@@ -362,55 +379,66 @@ roe_redcap_export_project_xml <- function(
   filename = roe_timestamp_filename("roe_redcap_project_xml"),
   overwrite = FALSE,
   redcap_uri = "https://redcap.wustl.edu/redcap/api/",
-  returnMetadataOnly = FALSE,
+  return_metadata_only = FALSE,
   records,
   fields,
   events,
-  returnFormat = c("xml", "json", "csv"),
-  exportSurveyFields = FALSE,
-  exportDataAccessGroups = FALSE,
-  filterLogic = NULL,
-  exportFiles = FALSE
+  return_format = c("xml", "json", "csv"),
+  export_survey_fields = FALSE,
+  export_data_access_groups = FALSE,
+  filter_logic = NULL,
+  export_files = FALSE
 ) {
   filename <- paste0(filename, ".xml")
 
   body <- list(token = token, content = "project_xml")
 
-  returnMetadataOnly <- redcap_logical(returnMetadataOnly)
-  body <- append(body, returnMetadataOnly)
+  body <- append(
+    body,
+    redcap_logical("returnMetadataOnly", return_metadata_only)
+  )
 
-  if(missing(records))
+  if (missing(records))
     records <- NULL
   else
     checkmate::assert(checkmate::check_class(records, "redcap_array"))
   body <- append(body, records)
 
-  if(missing(fields))
+  if (missing(fields))
     fields <- NULL
   else
     checkmate::assert(checkmate::check_class(fields, "redcap_array"))
   body <- append(body, fields)
 
-  if(missing(events))
+  if (missing(events))
     events <- NULL
   else
     checkmate::assert(checkmate::check_class(events, "redcap_array"))
   body <- append(body, events)
 
-  returnFormat <- list(returnFormat = match.arg(returnFormat))
-  body <- append(body, returnFormat)
+  body <- append(
+    body,
+    list("returnFormat" = match.arg(return_format))
+  )
 
-  exportSurveyFields <- redcap_logical(exportSurveyFields)
-  body <- append(body, exportSurveyFields)
+  body <- append(body, redcap_logical(
+    "exportSurveyFields",
+    export_survey_fields)
+  )
 
-  exportDataAccessGroups <- redcap_logical(exportDataAccessGroups)
-  body <- append(body, exportDataAccessGroups)
+  body <- append(body, redcap_logical(
+    "exportDataAccessGroups",
+    export_data_access_groups)
+  )
 
-  if(!is.null(filterLogic)) filterLogic <- list(filterLogic = filterLogic)
-  body <- append(body, filterLogic)
+  if (!is.null(filter_logic))
+    filter_logic <- list("filterLogic" = filter_logic)
+  body <- append(body, filter_logic)
 
-  exportFiles <- redcap_logical(exportFiles)
-  body <- append(body, exportFiles)
+  body <- append(body, redcap_logical(
+    "exportFiles",
+    export_files)
+  )
 
   httr::POST(redcap_uri, httr::write_disk(filename, overwrite), body = body)
 }
@@ -459,7 +487,7 @@ roe_redcap_delete_records <- function(
   checkmate::assert(checkmate::check_class(records, "redcap_array"))
   body <- append(body, records)
 
-  if(missing(arm))
+  if  (missing(arm))
     arm <- NULL
   else
     checkmate::assert(checkmate::check_integer(arm))

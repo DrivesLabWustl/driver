@@ -13,7 +13,8 @@ roe_box_ftp_upload(file, path, user, pass, ...)
 
 \item{user}{Box username (i.e., WashU email)}
 
-\item{pass}{unique password for external applications. Created at \url{https://wustl.app.box.com/account}}
+\item{pass}{unique password for external applications. Created at
+\url{https://wustl.app.box.com/account}}
 
 \item{...}{additional arguments passed to \code{\link[RCurl]{ftpUpload}}}
 }

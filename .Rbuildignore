@@ -5,3 +5,4 @@
 ^data-raw$
 ^\.github$
 ^codecov\.yml$
+^CODE_OF_CONDUCT\.md$

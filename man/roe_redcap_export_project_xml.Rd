@@ -9,15 +9,15 @@ roe_redcap_export_project_xml(
   filename = roe_timestamp_filename("roe_redcap_project_xml"),
   overwrite = FALSE,
   redcap_uri = "https://redcap.wustl.edu/redcap/api/",
-  returnMetadataOnly = FALSE,
+  return_metadata_only = FALSE,
   records,
   fields,
   events,
-  returnFormat = c("xml", "json", "csv"),
-  exportSurveyFields = FALSE,
-  exportDataAccessGroups = FALSE,
-  filterLogic = NULL,
-  exportFiles = FALSE
+  return_format = c("xml", "json", "csv"),
+  export_survey_fields = FALSE,
+  export_data_access_groups = FALSE,
+  filter_logic = NULL,
+  export_files = FALSE
 )
 }
 \arguments{
@@ -32,7 +32,7 @@ left-hand menu for obtaining a token for a given project.}
 \item{redcap_uri}{The URI (uniform resource identifier) of the REDCap
 project.}
 
-\item{returnMetadataOnly}{TRUE returns only metadata (all fields, forms,
+\item{return_metadata_only}{TRUE returns only metadata (all fields, forms,
 events, and arms), whereas FALSE returns all metadata and also data (and
 optionally filters the data according to any of the optional parameters
 provided in the request)}
@@ -46,12 +46,12 @@ pull (by default, all fields are pulled)}
 \item{events}{an array of unique event names that you wish to pull records
 for - only for longitudinal projects}
 
-\item{returnFormat}{csv, json, xml - specifies the format of error messages.
+\item{return_format}{csv, json, xml - specifies the format of error messages.
 If you do not pass in this flag, it will select the default format for you
 passed based on the 'format' flag you passed in or if no format flag was
 passed in, it will default to 'xml'.}
 
-\item{exportSurveyFields}{specifies whether or not to export the survey
+\item{export_survey_fields}{specifies whether or not to export the survey
 identifier field (e.g., 'redcap_survey_identifier') or survey timestamp
 fields (e.g., instrument+'_timestamp') when surveys are utilized in the
 project. If you do not pass in this flag, it will default to 'false'. If set
@@ -62,21 +62,21 @@ that survey is being exported. NOTE: If the survey identifier field or survey
  ignored since they are not real fields in the project but rather are
  pseudo-fields.}
 
-\item{exportDataAccessGroups}{specifies whether or not to export the
+\item{export_data_access_groups}{specifies whether or not to export the
 'redcap_data_access_group' field when data access groups are utilized in the
 project. If you do not pass in this flag, it will default to 'false'. NOTE:
 This flag is only viable if the user whose token is being used to make the
 API request is *not* in a data access group. If the user is in a group, then
 this flag will revert to its default value.}
 
-\item{filterLogic}{String of logic text (e.g., [age] > 30) for filtering the
+\item{filter_logic}{String of logic text (e.g., [age] > 30) for filtering the
 data to be returned by this API method, in which the API will only return the
  records (or record-events, if a longitudinal project) where the logic
  evaluates as TRUE. This parameter is blank/null by default unless a value is
   supplied. Please note that if the filter logic contains any incorrect
   syntax, the API will respond with an error message.}
 
-\item{exportFiles}{TRUE will cause the XML returned to include all files
+\item{export_files}{TRUE will cause the XML returned to include all files
 uploaded for File Upload and Signature fields for all records in the project,
  whereas FALSE will cause all such fields not to be included. NOTE: Setting
  this option to TRUE can make the export very large and may prevent it from

@@ -35,7 +35,7 @@ DF <- data.frame(
   "Trip_End_Longitude" = c(99.6986, 97.76478, 98.56789)
 )
 get_radius_gyration(
-  DF[DF$MapID == 68771,],
+  DF[DF$MapID == 68771, ],
   "Trip_End_Latitude",
   "Trip_End_Longitude"
 )

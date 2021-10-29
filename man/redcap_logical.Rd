@@ -4,10 +4,12 @@
 \alias{redcap_logical}
 \title{REDCap Logical}
 \usage{
-redcap_logical(x)
+redcap_logical(name, value)
 }
 \arguments{
-\item{x}{R logical to cast as REDCap API logical}
+\item{name}{name to give logical}
+
+\item{value}{R logical to cast as REDCap API logical}
 }
 \value{
 an R logical represented as a named list of lowercase character
@@ -18,12 +20,12 @@ REDCap Logical
 \examples{
 \dontrun{
 a <- TRUE
-redcap_logical(a)
+redcap_logical("a", a)
 
 b <- FALSE
-redcap_logical(b)
+redcap_logical("b", b)
 
 c <- "not gonna work"
-redcap_logical(c)
+redcap_logical("c", c)
 }
 }
