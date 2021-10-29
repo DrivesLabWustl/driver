@@ -32,6 +32,22 @@ remotes::install_github("RoeLabWustl/roelabr")
 
 <br />
 
+## Code of Conduct
+
+Please note that the roelabr project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+<br />
+
+## Code Style
+
+This package attempts to follow the [tidyverse style
+guide](https://style.tidyverse.org/index.html).
+
+<br />
+
 ## About
 
 ### Washington University in Saint Louis <img src="man/figures/brookings_seal.png" align="right" width="125px"/>
