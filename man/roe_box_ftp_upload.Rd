@@ -16,7 +16,7 @@ roe_box_ftp_upload(file, path, user, pass, ...)
 \item{pass}{unique password for external applications. Created at
 \url{https://wustl.app.box.com/account}}
 
-\item{...}{additional arguments passed to \code{\link[RCurl]{ftpUpload}}}
+\item{...}{additional arguments passed to \code{\link[RCurl:ftpUpload]{RCurl::ftpUpload()}}}
 }
 \value{
 The result of the \code{\link[RCurl]{curlPerform}} call.

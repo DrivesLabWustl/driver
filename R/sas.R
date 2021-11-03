@@ -12,7 +12,7 @@
 #' @references
 #' SAS Institute Inc. (1999). Rules for words and names: Names in the SAS
 #' language. Retrieved September 30, 2021, from
-#' \url{https://v8doc.sas.com/sashtml/lgref/z1031056.htm}.
+#' <https://v8doc.sas.com/sashtml/lgref/z1031056.htm>.
 roe_valid_sas_data_set_name <- function(data_set_name) {
   if (nchar(data_set_name) > 32) {
     stop("SAS data set names must be less than 32 characters.")

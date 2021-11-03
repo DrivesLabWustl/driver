@@ -4,7 +4,7 @@
 #' @param vintage = Year of dataset, e.g., 2000. This data is only collected
 #' during decennial censuses.
 #' @param key = Your Census API key, requested using
-#' \url{https://api.census.gov/data/key_signup.html}.
+#' <https://api.census.gov/data/key_signup.html>.
 #'
 #' @return A tibble with FIPS codes and P2 variables by tract group for the
 #' desired state.
@@ -35,19 +35,19 @@
 #'
 #' @details
 #' Decennial Census API Documentation
-#' \url{https://www.census.gov/data/developers/data-sets/decennial-census.html}
+#' <https://www.census.gov/data/developers/data-sets/decennial-census.html>
 #'
 #' URBAN AND RURAL variables listed in:
-#' \url{https://api.census.gov/data/2010/dec/sf1/variables.html}
+#' <https://api.census.gov/data/2010/dec/sf1/variables.html>
 #' \tabular{llllllll}{
-#' \strong{Name} \tab
-#' \strong{Label} \tab
-#' \strong{Concept} \tab
-#' \strong{Required} \tab
-#' \strong{Attributes} \tab
-#' \strong{Limit} \tab
-#' \strong{Predicate Type} \tab
-#' \strong{Group} \cr
+#' **Name** \tab
+#' **Label** \tab
+#' **Concept** \tab
+#' **Required** \tab
+#' **Attributes** \tab
+#' **Limit** \tab
+#' **Predicate Type** \tab
+#' **Group** \cr
 #' P002001 \tab
 #' Total \tab
 #' URBAN AND RURAL \tab
@@ -131,7 +131,7 @@ roe_census_get_block_group_pop <-
 #' @param vintage = Year of dataset, e.g., 2000. This data is only collected
 #' during decennial censuses.
 #' @param key = Your Census API key, requested using
-#' \url{https://api.census.gov/data/key_signup.html}.
+#' <https://api.census.gov/data/key_signup.html>.
 #'
 #' @return A tibble with P2 variables by zip code tabulation area.
 #' @export
@@ -153,19 +153,19 @@ roe_census_get_block_group_pop <-
 #'
 #' @details
 #' Decennial Census API Documentation
-#' \url{https://www.census.gov/data/developers/data-sets/decennial-census.html}
+#' <https://www.census.gov/data/developers/data-sets/decennial-census.html>
 #'
 #' URBAN AND RURAL variables listed in:
-#' \url{https://api.census.gov/data/2010/dec/sf1/variables.html}
+#' <https://api.census.gov/data/2010/dec/sf1/variables.html>
 #' \tabular{llllllll}{
-#' \strong{Name} \tab
-#' \strong{Label} \tab
-#' \strong{Concept} \tab
-#' \strong{Required} \tab
-#' \strong{Attributes} \tab
-#' \strong{Limit} \tab
-#' \strong{Predicate Type} \tab
-#' \strong{Group} \cr
+#' **Name** \tab
+#' **Label** \tab
+#' **Concept** \tab
+#' **Required** \tab
+#' **Attributes** \tab
+#' **Limit** \tab
+#' **Predicate Type** \tab
+#' **Group** \cr
 #' P002001 \tab
 #' Total \tab
 #' URBAN AND RURAL \tab

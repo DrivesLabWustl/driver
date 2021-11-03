@@ -5,13 +5,16 @@
 \title{Delete Records}
 \usage{
 roe_redcap_delete_records(
+  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
   token,
   records,
-  arm,
-  redcap_uri = "https://redcap.wustl.edu/redcap/api/"
+  arm
 )
 }
 \arguments{
+\item{redcap_uri}{The URI (uniform resource identifier) of the REDCap
+project.}
+
 \item{token}{The API token specific to your REDCap project and username (each
 token is unique to each user for each project). See the section on the
 left-hand menu for obtaining a token for a given project.}
@@ -21,15 +24,12 @@ to delete}
 
 \item{arm}{the arm number of the arm in which the record(s) should be
 deleted. (This can only be used if the project is longitudinal with more than
- one arm.) NOTE: If the arm parameter is not provided, the specified records
- will be deleted from all arms in which they exist. Whereas, if arm is
- provided, they will only be deleted from the specified arm.}
-
-\item{redcap_uri}{The URI (uniform resource identifier) of the REDCap
-project.}
+one arm.) NOTE: If the arm parameter is not provided, the specified records
+will be deleted from all arms in which they exist. Whereas, if arm is
+provided, they will only be deleted from the specified arm.}
 }
 \value{
-A httr::response object containing the number of records deleted.
+httr::response() object containing the number of records deleted.
 }
 \description{
 Delete Records

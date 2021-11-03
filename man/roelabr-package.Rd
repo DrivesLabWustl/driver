@@ -6,8 +6,7 @@
 \alias{roelabr-package}
 \title{roelabr: A collection of functions for the Roe Lab at Washington University}
 \description{
-A collection of functions for the Roe Lab at Washington University.
-    Having a central location for commonly utilized code is good practice.
+A collection of functions for the Roe Lab at Washington University. Having a central location for commonly utilized code is good practice.
 }
 \seealso{
 Useful links:

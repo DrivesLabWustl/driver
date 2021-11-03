@@ -25,8 +25,8 @@
 #' }
 #'
 #' @references
-#' \url{https://blog.jlevente.com/radius-of-gyration/}
-#' \url{https://alzres.biomedcentral.com/articles/10.1186/s13195-021-00852-1}
+#' <https://blog.jlevente.com/radius-of-gyration/>
+#' <https://alzres.biomedcentral.com/articles/10.1186/s13195-021-00852-1>
 
 
 get_radius_gyration <- function(DF,
@@ -85,7 +85,7 @@ get_radius_gyration <- function(DF,
 #' }
 #'
 #' @references
-#' \url{https://cran.rstudio.com/web/packages/trajr/vignettes/trajr-vignette.html}
+#' <https://cran.rstudio.com/web/packages/trajr/vignettes/trajr-vignette.html>
 
 
 get_route_straightness <- function(Start_Latitude, Start_Longitude,

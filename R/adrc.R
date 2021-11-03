@@ -8,7 +8,7 @@
 #' @examples
 #' roe_get_drug_codes("acetaminophen")
 #' @references
-#' \url{https://www.kegg.jp/kegg/drug/}
+#' <https://www.kegg.jp/kegg/drug/>
 roe_get_drug_codes <- function(drug_name) {
   sprintf("http://rest.kegg.jp/find/drug/%s", drug_name) %>%
     httr::GET() %>%

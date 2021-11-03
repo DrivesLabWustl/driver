@@ -4,8 +4,8 @@
 #' @param path the path to which the content is to be uploaded.
 #' @param user Box username (i.e., WashU email)
 #' @param pass unique password for external applications. Created at
-#' \url{https://wustl.app.box.com/account}
-#' @param ... additional arguments passed to \code{\link[RCurl]{ftpUpload}}
+#' <https://wustl.app.box.com/account>
+#' @param ... additional arguments passed to [RCurl::ftpUpload()]
 #'
 #' @inherit RCurl::ftpUpload return
 #' @export
@@ -23,7 +23,7 @@
 #' roe_box_ftp_upload(file, path, user, pass)
 #' }
 #'
-#' @references \url{https://wustl.app.box.com/services/box_ftp_server/}
+#' @references <https://wustl.app.box.com/services/box_ftp_server/>
 roe_box_ftp_upload <- function(file, path, user, pass, ...) {
   if (!requireNamespace("RCurl", quietly = TRUE)) {
     stop("Package \"RCurl\" needed for this function. Please install it.",

@@ -5,10 +5,10 @@
 \title{Export Entire Project as REDCap XML File (containing metadata & data)}
 \usage{
 roe_redcap_export_project_xml(
+  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
   token,
   filename = roe_timestamp_filename("roe_redcap_project_xml"),
   overwrite = FALSE,
-  redcap_uri = "https://redcap.wustl.edu/redcap/api/",
   return_metadata_only = FALSE,
   records,
   fields,
@@ -21,6 +21,9 @@ roe_redcap_export_project_xml(
 )
 }
 \arguments{
+\item{redcap_uri}{The URI (uniform resource identifier) of the REDCap
+project.}
+
 \item{token}{The API token specific to your REDCap project and username (each
 token is unique to each user for each project). See the section on the
 left-hand menu for obtaining a token for a given project.}
@@ -28,9 +31,6 @@ left-hand menu for obtaining a token for a given project.}
 \item{filename}{name of xml file to write results}
 
 \item{overwrite}{only overwrite existing filename if TRUE}
-
-\item{redcap_uri}{The URI (uniform resource identifier) of the REDCap
-project.}
 
 \item{return_metadata_only}{TRUE returns only metadata (all fields, forms,
 events, and arms), whereas FALSE returns all metadata and also data (and
@@ -58,55 +58,55 @@ project. If you do not pass in this flag, it will default to 'false'. If set
 to 'true', it will return the redcap_survey_identifier field and also the
 survey timestamp field for a particular survey when at least one field from
 that survey is being exported. NOTE: If the survey identifier field or survey
- timestamp fields are imported via API data import, they will simply be
- ignored since they are not real fields in the project but rather are
- pseudo-fields.}
+timestamp fields are imported via API data import, they will simply be
+ignored since they are not real fields in the project but rather are
+pseudo-fields.}
 
 \item{export_data_access_groups}{specifies whether or not to export the
 'redcap_data_access_group' field when data access groups are utilized in the
 project. If you do not pass in this flag, it will default to 'false'. NOTE:
 This flag is only viable if the user whose token is being used to make the
-API request is *not* in a data access group. If the user is in a group, then
+API request is \emph{not} in a data access group. If the user is in a group, then
 this flag will revert to its default value.}
 
-\item{filter_logic}{String of logic text (e.g., [age] > 30) for filtering the
+\item{filter_logic}{String of logic text (e.g., \link{age} > 30) for filtering the
 data to be returned by this API method, in which the API will only return the
- records (or record-events, if a longitudinal project) where the logic
- evaluates as TRUE. This parameter is blank/null by default unless a value is
-  supplied. Please note that if the filter logic contains any incorrect
-  syntax, the API will respond with an error message.}
+records (or record-events, if a longitudinal project) where the logic
+evaluates as TRUE. This parameter is blank/null by default unless a value is
+supplied. Please note that if the filter logic contains any incorrect
+syntax, the API will respond with an error message.}
 
 \item{export_files}{TRUE will cause the XML returned to include all files
 uploaded for File Upload and Signature fields for all records in the project,
- whereas FALSE will cause all such fields not to be included. NOTE: Setting
- this option to TRUE can make the export very large and may prevent it from
- completing if the project contains many files or very large files.}
+whereas FALSE will cause all such fields not to be included. NOTE: Setting
+this option to TRUE can make the export very large and may prevent it from
+completing if the project contains many files or very large files.}
 }
 \value{
-A httr::response object.
+httr::response() object
 }
 \description{
 The entire project (all records, events, arms, instruments,
 fields, and project attributes) can be downloaded as a single XML file, which
- is in CDISC ODM format (ODM version 1.3.1). This XML file can be used to
- create a clone of the project (including its data, optionally) on this
- REDCap server or on another REDCap server (it can be uploaded on the Create
- New Project page). Because it is in CDISC ODM format, it can also be used to
-  import the project into another ODM-compatible system. NOTE: All the option
-   paramters listed below ONLY apply to data returned if the
-   'returnMetadataOnly' parameter is set to FALSE (default). For this API
-   method, ALL metadata (all fields, forms, events, and arms) will always be
-   exported. Only the data returned can be filtered using the optional
-   parameters.
+is in CDISC ODM format (ODM version 1.3.1). This XML file can be used to
+create a clone of the project (including its data, optionally) on this
+REDCap server or on another REDCap server (it can be uploaded on the Create
+New Project page). Because it is in CDISC ODM format, it can also be used to
+import the project into another ODM-compatible system. NOTE: All the option
+paramters listed below ONLY apply to data returned if the
+'returnMetadataOnly' parameter is set to FALSE (default). For this API
+method, ALL metadata (all fields, forms, events, and arms) will always be
+exported. Only the data returned can be filtered using the optional
+parameters.
 
 Note about export rights: If the 'returnMetadataOnly' parameter is set to
 FALSE, then please be aware that Data Export user rights will be applied to
 any data returned from this API request. For example, if you have
 'De-Identified' or 'Remove all tagged Identifier fields' data export rights,
-then some data fields *might* be removed and filtered out of the data set
+then some data fields \emph{might} be removed and filtered out of the data set
 returned from the API. To make sure that no data is unnecessarily filtered
 out of your API request, you should have 'Full Data Set' export rights in the
- project.
+project.
 }
 \note{
 To use this method, you must have API Export privileges in the project.

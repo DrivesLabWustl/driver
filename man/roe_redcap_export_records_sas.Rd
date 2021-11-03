@@ -28,10 +28,10 @@ project.}
 }
 \description{
 The SAS export capability of REDCap v9.5 is broken such that the
- generated SAS script has voluminous syntactical errors. This function
+generated SAS script has voluminous syntactical errors. This function
 attempts to replicate the intended functionality of REDCap by downloading the
- data to a csv file and generating a syntactically correct SAS import script.
- If sas is found on the path, the script is executed in SAS batch mode to
+data to a csv file and generating a syntactically correct SAS import script.
+If sas is found on the path, the script is executed in SAS batch mode to
 produce the desired sas7bdat file.
 }
 \examples{

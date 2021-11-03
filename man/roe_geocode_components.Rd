@@ -18,14 +18,14 @@ roe_geocode_components(
 
 \item{fields}{vector of additional fields to return with query results. Note
 that these count as extra lookups and impact your dailu quota/costs. See
-[the official documentation](https://geocod.io/docs/#fields) for more
+\href{https://geocod.io/docs/#fields}{the official documentation} for more
 information on costs/pricing.}
 
 \item{...}{additional arguments passed to
-[rgeocodio::gio_geocode_components()]}
+\code{\link[rgeocodio:gio_geocode_components]{rgeocodio::gio_geocode_components()}}}
 }
 \value{
-a [tibble::tibble()] containing geocodio data per the request
+a \code{\link[tibble:tibble]{tibble::tibble()}} containing geocodio data per the request
 }
 \description{
 Geocode a single address

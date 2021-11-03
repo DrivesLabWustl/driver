@@ -22,7 +22,7 @@ trip end longitude location}
 }
 \value{
 Rg a single numeric value that gives the radius of gyration for the
- supplied dataframe in kilometers
+supplied dataframe in kilometers
 }
 \description{
 Calculate Radius of Gyration
