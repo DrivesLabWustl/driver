@@ -341,7 +341,7 @@ roe_redcap_export_records_sas <-
 #' This flag is only viable if the user whose token is being used to make the
 #' API request is *not* in a data access group. If the user is in a group, then
 #' this flag will revert to its default value.
-#' @param filter_logic String of logic text (e.g., [age] > 30) for filtering the
+#' @param filter_logic String of logic text (e.g., \[age\] > 30) for filtering the
 #' data to be returned by this API method, in which the API will only return the
 #'  records (or record-events, if a longitudinal project) where the logic
 #'  evaluates as TRUE. This parameter is blank/null by default unless a value is
@@ -517,10 +517,10 @@ roe_redcap_delete_records <-
 #' @param token The API token specific to your REDCap project and username (each
 #'  token is unique to each user for each project). See the section on the
 #'  left-hand menu for obtaining a token for a given project.
-#' @param format csv, json, xml [default], odm ('odm' refers to CDISC ODM XML
+#' @param format csv, json, xml \[default\], odm ('odm' refers to CDISC ODM XML
 #' format, specifically ODM version 1.3.1)
 #' @param type
-#' * flat - output as one record per row [default]
+#' * flat - output as one record per row \[default\]
 #' * eav - input as one data point per row
 #'     + Non-longitudinal: Will have the fields - record(1), field_name, value
 #'     + Longitudinal: Will have the fields - record*, field_name, value,
@@ -529,7 +529,7 @@ roe_redcap_delete_records <-
 #' 1. 'record' refers to the record ID for the project
 #' 2. Event name is the unique name for an event, not the event label
 #' @param overwrite_behavior
-#' * normal - blank/empty values will be ignored [default]
+#' * normal - blank/empty values will be ignored \[default\]
 #' * overwrite - blank/empty values are valid and will overwrite data
 #' @param force_auto_number If record auto-numbering has been enabled in the
 #' project, it may be desirable to import records where each record's record
@@ -543,8 +543,9 @@ roe_redcap_delete_records <-
 #'  'auto_ids', which will return a record list similar to 'ids' value, but it
 #'  will have the new record name followed by the provided record name in the
 #'  request, in which the two are comma-delimited. For example, if false (or
-#'  'false') - The record names provided in the request will be used. [default]
-#'  true (or 'true') - New record names will be automatically determined.
+#'  'false') - The record names provided in the request will be used.
+#'  \[default\] true (or 'true') - New record names will be automatically
+#'  determined.
 #' @param data The formatted data to be imported.
 #'
 #' TIP: If importing repeating instances for a repeating event or repeating
@@ -563,7 +564,7 @@ roe_redcap_delete_records <-
 #'  imported as EAV with the field_name as 'icecream___4' having a value of '1'
 #'  in order to set the option coded with '4' (which might be 'Chocolate') as '
 #'  checked'.
-#' @param date_format MDY, DMY, YMD [default] - the format of values being
+#' @param date_format MDY, DMY, YMD \[default\] - the format of values being
 #' imported for dates or datetime fields (understood with M representing
 #' 'month', D as 'day', and Y as 'year') - NOTE: The default format is Y-M-D
 #' (with dashes), while MDY and DMY values should always be formatted as M/D/Y
@@ -572,7 +573,7 @@ roe_redcap_delete_records <-
 #' data file (for CSV format only). Options include: comma ',' (default), 'tab',
 #'  semi-colon ';', pipe '|', or caret '^'. Simply provide the value in quotes
 #'  for this parameter.
-#' @param return_content count [default] - the number of records imported, ids -
+#' @param return_content count \[default\] - the number of records imported, ids -
 #'  a list of all record IDs that were imported, auto_ids = (used only when
 #'  forceAutoNumber=true) a list of pairs of all record IDs that were imported,
 #'  includes the new ID created and the ID value that was sent in the API

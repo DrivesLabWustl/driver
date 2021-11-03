@@ -26,11 +26,11 @@ project.}
 token is unique to each user for each project). See the section on the
 left-hand menu for obtaining a token for a given project.}
 
-\item{format}{csv, json, xml \link{default}, odm ('odm' refers to CDISC ODM XML
+\item{format}{csv, json, xml [default], odm ('odm' refers to CDISC ODM XML
 format, specifically ODM version 1.3.1)}
 
 \item{type}{\itemize{
-\item flat - output as one record per row \link{default}
+\item flat - output as one record per row [default]
 \item eav - input as one data point per row
 \itemize{
 \item Non-longitudinal: Will have the fields - record(1), field_name, value
@@ -44,7 +44,7 @@ redcap_event_name(2)
 }}
 
 \item{overwrite_behavior}{\itemize{
-\item normal - blank/empty values will be ignored \link{default}
+\item normal - blank/empty values will be ignored [default]
 \item overwrite - blank/empty values are valid and will overwrite data
 }}
 
@@ -60,8 +60,9 @@ into new auto record names, the returnContent parameter should be set to
 'auto_ids', which will return a record list similar to 'ids' value, but it
 will have the new record name followed by the provided record name in the
 request, in which the two are comma-delimited. For example, if false (or
-'false') - The record names provided in the request will be used. \link{default}
-true (or 'true') - New record names will be automatically determined.}
+'false') - The record names provided in the request will be used.
+[default] true (or 'true') - New record names will be automatically
+determined.}
 
 \item{data}{The formatted data to be imported.
 
@@ -82,7 +83,7 @@ imported as EAV with the field_name as 'icecream___4' having a value of '1'
 in order to set the option coded with '4' (which might be 'Chocolate') as '
 checked'.}
 
-\item{date_format}{MDY, DMY, YMD \link{default} - the format of values being
+\item{date_format}{MDY, DMY, YMD [default] - the format of values being
 imported for dates or datetime fields (understood with M representing
 'month', D as 'day', and Y as 'year') - NOTE: The default format is Y-M-D
 (with dashes), while MDY and DMY values should always be formatted as M/D/Y
@@ -93,7 +94,7 @@ data file (for CSV format only). Options include: comma ',' (default), 'tab',
 semi-colon ';', pipe '|', or caret '^'. Simply provide the value in quotes
 for this parameter.}
 
-\item{return_content}{count \link{default} - the number of records imported, ids -
+\item{return_content}{count [default] - the number of records imported, ids -
 a list of all record IDs that were imported, auto_ids = (used only when
 forceAutoNumber=true) a list of pairs of all record IDs that were imported,
 includes the new ID created and the ID value that was sent in the API
