@@ -46,6 +46,9 @@ By contributing to this project, you agree to abide by its terms.
 This package attempts to follow the [tidyverse style
 guide](https://style.tidyverse.org/index.html).
 
+The use of [{styler}](https://github.com/r-lib/styler) and
+[{lintr}](https://github.com/r-lib/lintr) are recommended.
+
 <br />
 
 ## About

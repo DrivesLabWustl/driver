@@ -69,9 +69,9 @@ This flag is only viable if the user whose token is being used to make the
 API request is \emph{not} in a data access group. If the user is in a group, then
 this flag will revert to its default value.}
 
-\item{filter_logic}{String of logic text (e.g., [age] > 30) for filtering the
-data to be returned by this API method, in which the API will only return the
-records (or record-events, if a longitudinal project) where the logic
+\item{filter_logic}{String of logic text (e.g., [age] > 30) for filtering
+the data to be returned by this API method, in which the API will only return
+the records (or record-events, if a longitudinal project) where the logic
 evaluates as TRUE. This parameter is blank/null by default unless a value is
 supplied. Please note that if the filter logic contains any incorrect
 syntax, the API will respond with an error message.}

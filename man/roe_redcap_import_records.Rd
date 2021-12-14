@@ -94,11 +94,13 @@ data file (for CSV format only). Options include: comma ',' (default), 'tab',
 semi-colon ';', pipe '|', or caret '^'. Simply provide the value in quotes
 for this parameter.}
 
-\item{return_content}{count [default] - the number of records imported, ids -
-a list of all record IDs that were imported, auto_ids = (used only when
+\item{return_content}{count [default] - the number of records imported, ids
+\itemize{
+\item a list of all record IDs that were imported, auto_ids = (used only when
 forceAutoNumber=true) a list of pairs of all record IDs that were imported,
 includes the new ID created and the ID value that was sent in the API
-request (e.g., 323,10).}
+request (e.g., 323,10).
+}}
 
 \item{return_format}{csv, json, xml - specifies the format of error messages.
 If you do not pass in this flag, it will select the default format for you

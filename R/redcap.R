@@ -341,9 +341,9 @@ roe_redcap_export_records_sas <-
 #' This flag is only viable if the user whose token is being used to make the
 #' API request is *not* in a data access group. If the user is in a group, then
 #' this flag will revert to its default value.
-#' @param filter_logic String of logic text (e.g., \[age\] > 30) for filtering the
-#' data to be returned by this API method, in which the API will only return the
-#'  records (or record-events, if a longitudinal project) where the logic
+#' @param filter_logic String of logic text (e.g., \[age\] > 30) for filtering
+#' the data to be returned by this API method, in which the API will only return
+#'  the records (or record-events, if a longitudinal project) where the logic
 #'  evaluates as TRUE. This parameter is blank/null by default unless a value is
 #'   supplied. Please note that if the filter logic contains any incorrect
 #'   syntax, the API will respond with an error message.
@@ -573,8 +573,8 @@ roe_redcap_delete_records <-
 #' data file (for CSV format only). Options include: comma ',' (default), 'tab',
 #'  semi-colon ';', pipe '|', or caret '^'. Simply provide the value in quotes
 #'  for this parameter.
-#' @param return_content count \[default\] - the number of records imported, ids -
-#'  a list of all record IDs that were imported, auto_ids = (used only when
+#' @param return_content count \[default\] - the number of records imported, ids
+#'  - a list of all record IDs that were imported, auto_ids = (used only when
 #'  forceAutoNumber=true) a list of pairs of all record IDs that were imported,
 #'  includes the new ID created and the ID value that was sent in the API
 #'  request (e.g., 323,10).
@@ -651,3 +651,30 @@ roe_redcap_import_records <-
 
     httr::POST(redcap_uri, body = body, encode = "form")
   }
+
+
+
+#' Retrieve credentials from a csv file and read records from a REDCap project
+#'
+#' @param project_id The ID assigned to the project withing REDCap. This allows
+#' the user to store tokens to multiple REDCap projects in one file.
+#' @param path_credential The file path to the CSV containing the credentials.
+#' @param ... Additional arguments passed to
+#' [REDCapR::retrieve_credential_local()] and [REDCapR::redcap_read()].
+#'
+#' @return An R [base::data.frame()] of the desired records and columns.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' roe_redcap_read(6648)
+#' }
+roe_redcap_read <- function(project_id, path_credential = "~/.REDCapR", ...) {
+  REDCapR::retrieve_credential_local(
+    path_credential = path_credential,
+    project_id = project_id,
+    ...
+  ) -> p
+
+  REDCapR::redcap_read(redcap_uri = p$redcap_uri, token = p$token, ...)$data
+}
