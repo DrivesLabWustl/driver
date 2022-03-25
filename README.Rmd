@@ -61,7 +61,7 @@ sticker(
 
 ## Overview
 
-The goal of ``r params$package`` is to provide helpful functions for the [Drives Lab at Washington University in Saint Louis](https://drivesproject.wustl.edu/).
+The goal of ``r params$package`` is to provide helpful functions for the [Drives Lab at Washington University in Saint Louis](https://drivesproject.wustl.edu).
 
 <br />
 
