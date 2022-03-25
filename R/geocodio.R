@@ -10,12 +10,12 @@
 #'
 #' @return a [tibble::tibble()] containing geocodio data per the request
 #' @export
-roe_geocode_components <- function(street,
-                                   city,
-                                   state,
-                                   postal_code,
-                                   fields = "census2010",
-                                   ...) {
+geocode_components <- function(street,
+                               city,
+                               state,
+                               postal_code,
+                               fields = "census2010",
+                               ...) {
   rgeocodio::gio_geocode_components(
     street = street,
     city = city,

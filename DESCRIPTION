@@ -1,6 +1,6 @@
-Package: roelabr
+Package: driver
 Type: Package
-Title: A collection of functions for the Roe Lab at Washington University
+Title: A collection of functions for the Drives Lab at Washington University
 Version: 0.1.0
 Authors@R: 
     c(person(given = "Matthew",
@@ -13,13 +13,13 @@ Authors@R:
 		     role = "aut",
 		     email = "julie.wisch@wustl.edu",
 		     comment = c(ORCID = "0000-0003-3624-2784")))
-Description: A collection of functions for the Roe Lab at Washington University.
+Description: A collection of functions for the Drives Lab at Washington University.
     Having a central location for commonly utilized code is good practice.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/RoeLabWustl/roelabr
-BugReports: https://github.com/RoeLabWustl/roelabr/issues
+URL: https://github.com/DrivesLabWustl/driver
+BugReports: https://github.com/DrivesLabWustl/driver/issues
 Depends:
     R (>= 2.10),
     dplyr

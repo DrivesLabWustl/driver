@@ -1,4 +1,4 @@
 library(testthat)
-library(roelabr)
+library(driver)
 
-test_check("roelabr")
+test_check("driver")

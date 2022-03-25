@@ -13,18 +13,18 @@
 #' @examples
 #' \dontrun{
 #' ## data for all block groups in Missouri
-#' roe_census_get_block_group_pop("29")
+#' census_block_group_populations("29")
 #'
 #' ## data for all block groups
 #' fips_codes_for_states_and_dc %>%
 #'   mutate(data = purrr::map(
 #'     state_fips_code,
-#'     roe_census_get_block_group_pop
+#'     census_block_group_populations
 #'   )) %>%
 #'   tidyr::unnest(cols = c(data))
 #'
 #' ## compute percents urban and rural for each Missouri block group
-#' roe_census_get_block_group_pop("29") %>%
+#' census_block_group_populations("29") %>%
 #'   mutate(
 #'     cen_bgrp_pct_urban_2010 =
 #'       100 * cen_bgrp_pop_urban_2010 / cen_bgrp_pop_total_2010,
@@ -89,7 +89,7 @@
 #' int  \tab
 #' P2
 #' }
-roe_census_get_block_group_pop <-
+census_block_group_populations <-
   function(state_fips_code,
            vintage = c("2010", "2000"),
            key = Sys.getenv("CENSUS_KEY")) {
@@ -139,10 +139,10 @@ roe_census_get_block_group_pop <-
 #' @examples
 #' \dontrun{
 #' ## data for all zip code tabulation areas
-#' roe_census_get_zip_code_pop()
+#' census_zipcode_populations()
 #'
 #' ## compute percents urban and rural for each zip code tabulation area
-#' roe_census_get_zip_code_pop() %>%
+#' census_zipcode_populations() %>%
 #'   mutate(
 #'     cen_zcta_pct_urban_2010 =
 #'       100 * cen_zcta_pop_urban_2010 / cen_zcta_pop_total_2010,
@@ -207,7 +207,7 @@ roe_census_get_block_group_pop <-
 #' int  \tab
 #' P2
 #' }
-roe_census_get_zip_code_pop <-
+census_zipcode_populations <-
   function(vintage = c("2010", "2000"),
            key = Sys.getenv("CENSUS_KEY")) {
     vintage <- match.arg(vintage)

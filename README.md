@@ -1,14 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# roelabr <img src="man/figures/roelabr_hex.png" align="right" width="125px" />
+# driver <img src="man/figures/driver_hex.png" align="right" width="125px" />
 
 <!-- badges: start -->
 
 [![Under
-Development](https://img.shields.io/badge/status-under%20development-red.svg)](https://github.com/RoeLabWustl/roelabr)
+Development](https://img.shields.io/badge/status-under%20development-red.svg)](https://github.com/DrivesLabWustl/driver)
 [![Last
-Commit](https://img.shields.io/github/last-commit/RoeLabWustl/roelabr.svg)](https://github.com/RoeLabWustl/roelabr/commits/master)
+Commit](https://img.shields.io/github/last-commit/DrivesLabWustl/driver.svg)](https://github.com/DrivesLabWustl/driver/commits/master)
 [![R-CMD-check](https://github.com/RoeLabWustl/roelabr/workflows/R-CMD-check/badge.svg)](https://github.com/RoeLabWustl/roelabr/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/RoeLabWustl/roelabr/branch/main/graph/badge.svg)](https://codecov.io/gh/RoeLabWustl/roelabr?branch=main)
@@ -16,26 +16,27 @@ coverage](https://codecov.io/gh/RoeLabWustl/roelabr/branch/main/graph/badge.svg)
 
 ## Overview
 
-The goal of `roelabr` is to provide helpful functions for the [Roe Lab
-at Washington University in Saint Louis](https://roelab.wustl.edu/).
+The goal of `driver` is to provide helpful functions for the [Drives Lab
+at Washington University in Saint
+Louis](https://drivesproject.wustl.edu/).
 
 <br />
 
 ## Installation
 
-You can install `roelabr` from
-[GitHub](https://github.com/RoeLabWustl/roelabr) with:
+You can install `driver` from
+[GitHub](https://github.com/DrivesLabWustl/driver) with:
 
 ``` r
-remotes::install_github("RoeLabWustl/roelabr")
+remotes::install_github("DrivesLabWustl/driver")
 ```
 
 <br />
 
 ## Code of Conduct
 
-Please note that the roelabr project is released with a [Contributor
-Code of
+Please note that the driver project is released with a [Contributor Code
+of
 Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 

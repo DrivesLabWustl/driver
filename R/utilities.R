@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' roe_timestamp_filename("roe_redcap_sas_export")
-roe_timestamp_filename <- function(x) {
+#' timestamp_filename("redcap_sas_export")
+timestamp_filename <- function(x) {
   sprintf("%s_%s", x, format(Sys.time(), "%y%m%d%H%M%S"))
 }

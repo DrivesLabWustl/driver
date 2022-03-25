@@ -74,19 +74,19 @@ redcap_logical <- function(name, value) {
 #' @examples
 #' \dontrun{
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_redcap_export_records_sas(token, roe_timestamp_filename("static"))
+#' redcap_export_records_sas(token, timestamp_filename("static"))
 #'
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
-#' roe_redcap_export_records_sas(token, roe_timestamp_filename("mother"))
+#' redcap_export_records_sas(token, timestamp_filename("mother"))
 #' }
-roe_redcap_export_records_sas <-
+redcap_export_records_sas <-
   function(token,
-           filename = roe_timestamp_filename("roe_redcap_sas_export"),
+           filename = timestamp_filename("redcap_sas_export"),
            redcap_uri = "https://redcap.wustl.edu/redcap/api/",
            linesize = 78,
            pagesize = 60) {
     # check and prepare file names
-    roe_valid_sas_data_set_name(filename)
+    valid_sas_data_set_name(filename)
     csv_filename <- sprintf("%s.csv", filename)
     sas_filename <- sprintf("%s.sas", filename)
 
@@ -360,33 +360,33 @@ roe_redcap_export_records_sas <-
 #' \dontrun{
 #' ## full export from static
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_redcap_export_project_xml(
+#' redcap_export_project_xml(
 #'   token,
-#'   roe_timestamp_filename("static"),
+#'   timestamp_filename("static"),
 #'   exportFiles = TRUE
 #' )
 #'
 #' ## full export from mother
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 6785)$token
-#' roe_redcap_export_project_xml(
+#' redcap_export_project_xml(
 #'   token,
-#'   roe_timestamp_filename("mother"),
+#'   timestamp_filename("mother"),
 #'   exportFiles = TRUE
 #' )
 #'
 #' ## one record and two fields from static
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_redcap_export_project_xml(
+#' redcap_export_project_xml(
 #'   token,
-#'   roe_timestamp_filename("partial_static"),
+#'   timestamp_filename("partial_static"),
 #'   records = redcap_array("records", 16227),
 #'   fields = redcap_array("fields", c("id", "updatedate"))
 #' )
 #' }
-roe_redcap_export_project_xml <-
+redcap_export_project_xml <-
   function(redcap_uri = "https://redcap.wustl.edu/redcap/api/",
            token,
-           filename = roe_timestamp_filename("roe_redcap_project_xml"),
+           filename = timestamp_filename("redcap_project_xml"),
            overwrite = FALSE,
            return_metadata_only = FALSE,
            records,
@@ -479,12 +479,12 @@ roe_redcap_export_project_xml <-
 #' \dontrun{
 #' ## delete two records from static
 #' token <- REDCapR::retrieve_credential_local("~/.REDCapR", 7842)$token
-#' roe_redcap_delete_records(
+#' redcap_delete_records(
 #'   token,
 #'   records = redcap_array("records", c(16227, 16342))
 #' )
 #' }
-roe_redcap_delete_records <-
+redcap_delete_records <-
   function(redcap_uri = "https://redcap.wustl.edu/redcap/api/",
            token,
            records,
@@ -605,7 +605,7 @@ roe_redcap_delete_records <-
 #'
 #' ### submit api request and check response
 #' httr::content(
-#'   roe_redcap_import_records(
+#'   redcap_import_records(
 #'     token = p1$token,
 #'     format = "csv",
 #'     type = "eav",
@@ -614,7 +614,7 @@ roe_redcap_delete_records <-
 #'   )
 #' )
 #' }
-roe_redcap_import_records <-
+redcap_import_records <-
   function(redcap_uri = "https://redcap.wustl.edu/redcap/api/",
            token,
            format = c("xml", "csv", "json", "odm"),
@@ -667,9 +667,9 @@ roe_redcap_import_records <-
 #'
 #' @examples
 #' \dontrun{
-#' roe_redcap_read(6648)
+#' redcap_read(6648)
 #' }
-roe_redcap_read <- function(project_id, path_credential = "~/.REDCapR", ...) {
+redcap_read <- function(project_id, path_credential = "~/.REDCapR", ...) {
   REDCapR::retrieve_credential_local(
     path_credential = path_credential,
     project_id = project_id,

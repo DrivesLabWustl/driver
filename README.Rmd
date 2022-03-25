@@ -1,8 +1,8 @@
 ---
 output: github_document
 params:
-  github: RoeLabWustl
-  package: roelabr
+  github: DrivesLabWustl
+  package: driver
   font: Rockwell
   font_ext: ttf
   color: "#a51417"
@@ -25,26 +25,28 @@ showtext::showtext_auto()
 
 library(hexSticker)
 
-sticker(subplot = paste0("man/figures/", params$package, "_logo.png"),
-        s_x = 1,
-        s_y = 1.1,
-        s_width = 0.75,
-        s_height = 0.75,
-        package  = params$package,
-        p_x = 1,
-        p_y = 0.5,
-        p_color = params$color,
-        p_family = params$font,
-        p_size = 18,
-        h_fill = "#ffffff",
-        h_color = params$color,
-        url = paste("github.com", params$github, params$package, sep = "/"),
-        u_color = "black",
-        u_family = params$font,
-        u_size = 3.5,
-        u_x = 1.005,
-        u_y = 0.1,
-        filename = paste0("man/figures/", params$package, "_hex.png"))
+sticker(
+  subplot = paste0("man/figures/", params$package, "_logo.png"),
+  s_x = 1,
+  s_y = 1.1,
+  s_width = 0.75,
+  s_height = 0.75,
+  package  = params$package,
+  p_x = 1,
+  p_y = 0.5,
+  p_color = params$color,
+  p_family = params$font,
+  p_size = 18,
+  h_fill = "#ffffff",
+  h_color = params$color,
+  url = paste("github.com", params$github, params$package, sep = "/"),
+  u_color = "black",
+  u_family = params$font,
+  u_size = 3.5,
+  u_x = 1.005,
+  u_y = 0.1,
+  filename = paste0("man/figures/", params$package, "_hex.png")
+)
 ```
 
 # `r params$package` <img src="man/figures/`r params$package`_hex.png" align="right" width="125px" />
@@ -58,7 +60,7 @@ sticker(subplot = paste0("man/figures/", params$package, "_logo.png"),
 
 ## Overview
 
-The goal of ``r params$package`` is to provide helpful functions for the [Roe Lab at Washington University in Saint Louis](https://roelab.wustl.edu/).
+The goal of ``r params$package`` is to provide helpful functions for the [Drives Lab at Washington University in Saint Louis](https://drivesproject.wustl.edu/).
 
 <br />
 
@@ -74,7 +76,7 @@ remotes::install_github("`r params$github`/`r params$package`")
 
 ## Code of Conduct
 
-Please note that the roelabr project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the `r params$package` project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
 <br />
 
