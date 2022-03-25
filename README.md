@@ -9,9 +9,9 @@
 Development](https://img.shields.io/badge/status-under%20development-red.svg)](https://github.com/DrivesLabWustl/driver)
 [![Last
 Commit](https://img.shields.io/github/last-commit/DrivesLabWustl/driver.svg)](https://github.com/DrivesLabWustl/driver/commits/master)
-[![R-CMD-check](https://github.com/RoeLabWustl/roelabr/workflows/R-CMD-check/badge.svg)](https://github.com/RoeLabWustl/roelabr/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/RoeLabWustl/roelabr/branch/main/graph/badge.svg)](https://codecov.io/gh/RoeLabWustl/roelabr?branch=main)
+[![R-CMD-check](https://github.com/DrivesLabWustl/driver/workflows/R-CMD-check/badge.svg)](https://github.com/DrivesLabWustl/driver/actions)
+[![codecov](https://codecov.io/gh/DrivesLabWustl/driver/branch/main/graph/badge.svg?token=Xw9cCFWmE6)](https://codecov.io/gh/DrivesLabWustl/driver)
+
 <!-- badges: end -->
 
 ## Overview
