@@ -37,7 +37,8 @@ Imports:
     purrr,
     hms,
     lubridate,
-    DBI
+    DBI,
+    janitor
 Remotes:
     hrbrmstr/rgeocodio
 RoxygenNote: 7.1.2

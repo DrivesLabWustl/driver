@@ -137,7 +137,7 @@ read_daily_crumb <- function(file) {
   contents <- NULL
 
   # Type 1
-  if (header == daily_crumb_headers$header[1]) {
+  if (header == driver::daily_crumb_headers$header[1]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -166,7 +166,7 @@ read_daily_crumb <- function(file) {
   }
 
   # Type 2
-  if (header == daily_crumb_headers$header[2]) {
+  if (header == driver::daily_crumb_headers$header[2]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -193,7 +193,7 @@ read_daily_crumb <- function(file) {
   }
 
   # Type 3
-  if (header == daily_crumb_headers$header[3]) {
+  if (header == driver::daily_crumb_headers$header[3]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -221,7 +221,7 @@ read_daily_crumb <- function(file) {
   }
 
   # Type 4
-  if (header == daily_crumb_headers$header[4]) {
+  if (header == driver::daily_crumb_headers$header[4]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -260,18 +260,18 @@ read_daily_crumb <- function(file) {
           # (%b is for abbreviated month, but it also works for full months)
           stringr::str_detect(Timestamp, "[a-z]") ~
             suppressWarnings(
-              lubridate::as_datetime(Timestamp, format = "%d %b %Y %H:%M:%S")),
+              lubridate::as_datetime(.data$Timestamp, format = "%d %b %Y %H:%M:%S")),
           # and sometimes the datetime is specified like '2022-03-21 01:01:01.0'
           # this is a default format
-          TRUE ~ suppressWarnings(lubridate::as_datetime(Timestamp))
+          TRUE ~ suppressWarnings(lubridate::as_datetime(.data$Timestamp))
         ),
-        date = lubridate::date(Timestamp),
-        time = hms::as_hms(Timestamp)
+        date = lubridate::date(.data$Timestamp),
+        time = hms::as_hms(.data$Timestamp)
       )
 
     # check for failed timestamp parsings
     contents %>%
-      dplyr::filter(is.na(Timestamp)) %>%
+      dplyr::filter(is.na(.data$Timestamp)) %>%
       nrow() -> n_na_timestamps
     if (n_na_timestamps > 0) {
       warning(sprintf("%i, `Timestamp` failed to parse.", n_na_timestamps))
@@ -282,7 +282,7 @@ read_daily_crumb <- function(file) {
   }
 
   # Type 5
-  if (header == daily_crumb_headers$header[5]) {
+  if (header == driver::daily_crumb_headers$header[5]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -309,7 +309,7 @@ read_daily_crumb <- function(file) {
   }
 
   # Type 6
-  if (header == daily_crumb_headers$header[6]) {
+  if (header == driver::daily_crumb_headers$header[6]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -339,7 +339,7 @@ read_daily_crumb <- function(file) {
   }
 
   # Type 7
-  if (header == daily_crumb_headers$header[7]) {
+  if (header == driver::daily_crumb_headers$header[7]) {
     contents <- readr::read_delim(
       file,
       delim = ";",
@@ -393,7 +393,7 @@ read_daily_crumb <- function(file) {
 
   contents %>%
     janitor::clean_names() %>%
-    dplyr::bind_rows(master_crumb_template, .)
+    dplyr::bind_rows(driver::master_crumb_template, .data)
 }
 
 
@@ -423,35 +423,53 @@ collate_daily_crumb_metadata <- function(crumb_directory) {
       # strip path
       file_basename = basename(file),
       # strip extension
-      file_basename_sans_ext = tools::file_path_sans_ext(file_basename),
+      file_basename_sans_ext = tools::file_path_sans_ext(.data$file_basename),
       # strip leading 'Breadcrumb_' or 'Breadcrumb-'
       file_date_string = stringr::str_remove(
-        file_basename_sans_ext, "^Breadcrumb[_-]"
+        .data$file_basename_sans_ext, "^Breadcrumb[_-]"
       ),
       # case_when evaluates all rhs and keeps desired
       # this produces warning messages that do not apply to the final results
       # we will suppress all warnings for now and check for errors later
       date = dplyr::case_when(
-        stringr::str_detect(file_basename, daily_crumb_name_patterns[1]) ~
+        stringr::str_detect(
+          .data$file_basename,
+          driver::daily_crumb_name_patterns[1]
+        ) ~
           suppressWarnings(
-            lubridate::as_date(file_date_string, format = "%d%b%Y")),
-        stringr::str_detect(file_basename, daily_crumb_name_patterns[2]) ~
+            lubridate::as_date(.data$file_date_string, format = "%d%b%Y")),
+        stringr::str_detect(
+          .data$file_basename,
+          driver::daily_crumb_name_patterns[2]
+        ) ~
           suppressWarnings(
-            lubridate::as_date(file_date_string, format = "%d%B%Y")),
-        stringr::str_detect(file_basename, daily_crumb_name_patterns[3]) ~
+            lubridate::as_date(
+              .data$file_date_string,
+              format = "%d%B%Y")
+          ),
+        stringr::str_detect(
+          .data$file_basename,
+          driver::daily_crumb_name_patterns[3]
+        ) ~
           suppressWarnings(
-            lubridate::as_date(file_date_string, format = "%d_%B_%Y")),
-        stringr::str_detect(file_basename, daily_crumb_name_patterns[4]) ~
+            lubridate::as_date(
+              .data$file_date_string,
+              format = "%d_%B_%Y")
+          ),
+        stringr::str_detect(
+          .data$file_basename,
+          driver::daily_crumb_name_patterns[4]
+        ) ~
           suppressWarnings(
-            lubridate::as_date(file_date_string)),
+            lubridate::as_date(.data$file_date_string)),
         TRUE ~ lubridate::NA_Date_
       )
     ) %>%
     dplyr::select(file, date) -> daily_crumb_names_and_dates
 
   daily_crumb_names_and_dates %>%
-    dplyr::filter(is.na(date)) %>%
-    dplyr::pull(file) -> undated_daily_crumb_names
+    dplyr::filter(is.na(.data$date)) %>%
+    dplyr::pull(.data$file) -> undated_daily_crumb_names
 
   if (length(undated_daily_crumb_names) > 0) {
     stop(
@@ -464,7 +482,7 @@ collate_daily_crumb_metadata <- function(crumb_directory) {
   }
 
   daily_crumb_names_and_dates %>%
-    dplyr::arrange(date)
+    dplyr::arrange(.data$date)
 }
 
 
@@ -508,7 +526,10 @@ write_timespan_crumb <- function(daily_crumb_metadata, d0, d1) {
   csv <- sprintf("breadcrumb_%s_to_%s.csv", d0, d1)
 
   daily_crumb_metadata %>%
-    dplyr::filter(d0 <= date, date < d1) -> filtered_daily_crumb_metadata
+    dplyr::filter(
+      d0 <= .data$date,
+      .data$date < d1
+    ) -> filtered_daily_crumb_metadata
 
   message(
     sprintf(
