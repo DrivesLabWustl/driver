@@ -6,7 +6,7 @@
 #' template to store all known breadcrumb data in a common format.
 #'
 #' @export
-master_breadcrumb_template <- dplyr::tibble(
+master_crumb_template <- dplyr::tibble(
   vehicle_name          = character(),
   latitude              = double(),
   longitude             = double(),
@@ -39,10 +39,10 @@ master_breadcrumb_template <- dplyr::tibble(
 #' Breadcrumb files are inconsistently named. This character vector contains
 #' regular expressions for all known name patterns. This is useful for
 #' determining how to extract the date from the file name in
-#' `collate_all_daily_breadcrumb_metadata()`.
+#' `collate_all_daily_crumb_metadata()`.
 #'
 #' @export
-daily_breadcrumb_name_patterns <- c(
+daily_crumb_name_patterns <- c(
   # Type 1; e.g., Breadcrumb_01Apr2016.csv
   "^Breadcrumb_\\d{2}[A-Z][a-z]{2}\\d{4}\\.csv$",
 
@@ -58,47 +58,6 @@ daily_breadcrumb_name_patterns <- c(
 
 
 
-#' Daily Breadcrumb Headers
-#'
-#' Breadcrumb files are inconsistently formatted. Known issues include that
-#' some are comma delimited and some semicolon, some contain datetimes and some
-#' contain dates and times, some use '' and some use '.' as missing, and some
-#' included fields are inconsistent from one file to the next - especially the
-#' datetimes vs date and time issue. This character vector contains all known
-#' breadcrumb file headers and is useful in determining how to read a daily
-#' breadcrumb file in `read_daily_breadcrumb()`.
-#'
-#' @export
-daily_breadcrumb_headers <- c(
-  # avoid lint error "Lines should not be more than 80 characters."
-  # nolint start
-
-  # Type 1; e.g., Breadcrumb_11Dec2021.csv
-  "\"Vehicle_Name\",\"Driver_Name\",\"Occupants\",Latitude,Longitude,Vehicle_Speed,Speed Limit,Difference,\"Event_Name\",\"Address\",\"Event_Type\",\"Date\",\"Time\",Odometer_Reading,Trip Distance,GPS_Fix_Quality,Peak_Speed,Average_Speed,Initial_Speed,Final_Speed",
-
-  # Type 2; e.g., Breadcrumb_18Jun2015.csv
-  "\"Vehicle_Name\",Latitude,Longitude,Vehicle_Speed,\"Event_Name\",\"Address\",\"Event_Type\",\"Date\",\"Time\",Odometer_Reading,GPS_Fix_Quality,Peak_Speed,Average_Speed,Initial_Speed,Final_Speed,Previous_Fuel_Level,New_Fuel_Level,\"Nearest_Landmark_Name\"",
-
-  # Type 3; e.g., Breadcrumb_27Apr2016.csv
-  "\"Vehicle_Name\",Latitude,Longitude,Vehicle_Speed,\"Event_Name\",\"Address\",\"Event_Type\",\"Date\",\"Time\",Odometer_Reading,Trip Distance,GPS_Fix_Quality,Peak_Speed,Average_Speed,Initial_Speed,Final_Speed,Previous_Fuel_Level,New_Fuel_Level,\"Nearest_Landmark_Name\"",
-
-  # Type 4; e.g., Breadcrumb_12_June_2015.csv
-  "\"Vehicle_Name\",Latitude,Longitude,Vehicle_Speed,\"Event_Name\",\"Address\",\"Event_Type\",\"Timestamp\",Odometer_Reading,GPS_Fix_Quality,Peak_Speed,Average_Speed,Initial_Speed,Final_Speed,Previous_Fuel_Level,New_Fuel_Level,\"Nearest_Landmark_Name\"",
-
-  # Type 5; e.g., Breadcrumb_27Aug2019.csv
-  "\"Vehicle_Name\",Latitude,Longitude,Vehicle_Speed,Speed Limit,Difference,\"Event_Name\",\"Address\",\"Event_Type\",\"Date\",\"Time\",Odometer_Reading,Trip Distance,GPS_Fix_Quality,Peak_Speed,Average_Speed,Initial_Speed,Final_Speed",
-
-  # Type 6; e.g., Breadcrumb_20Aug2019.csv
-  "\"Vehicle_Name\",Latitude,Longitude,Vehicle_Speed,Speed Limit,Difference,\"Event_Name\",\"Address\",\"Event_Type\",\"Date\",\"Time\",Odometer_Reading,Trip Distance,GPS_Fix_Quality,Peak_Speed,Average_Speed,Initial_Speed,Final_Speed",
-
-  # Type 7; e.g., Breadcrumb-2015-01-28.csv
-  "Vehicle Name;Latitude;Longitude;Vehicle Speed;Event Name;Address;Event Type;Timestamp;Odometer Reading;GPS Fix Quality;Peak Speed;Average Speed;Initial Speed;Final Speed;Previous Fuel Level;New Fuel Level;Nearest Landmark Name"
-
-  # nolint end
-)
-
-
-
 #' Path to Research Infrastructure Services Storage
 #'
 #' @param path additional path beyond root mapping
@@ -108,7 +67,7 @@ daily_breadcrumb_headers <- c(
 #'
 #' @examples
 #' \dontrun{
-#' breadcrumb_directory <- ris_storage_path("Reports")
+#' crumb_directory <- ris_storage_path("Reports")
 #' }
 ris_storage_path <- function(path = "") {
   ris_storage <- dplyr::case_when(
@@ -140,11 +99,11 @@ ris_storage_path <- function(path = "") {
 #'
 #' @examples
 #' \dontrun{
-#' read_daily_breadcrumb_header("Breadcrumb_07Nov2017.csv")
+#' read_daily_crumb_header("Breadcrumb_07Nov2017.csv")
 #' }
 #'
-#' @note Used to determine breadcrumb read in `read_daily_breadcrumb()`.
-read_daily_breadcrumb_header <- function(x) {
+#' @note Used to determine breadcrumb read in `read_daily_crumb()`.
+read_daily_crumb_header <- function(x) {
   f <- file(x, "r")
   header <- readLines(f, n = 1)
   close(f)
@@ -156,15 +115,14 @@ read_daily_breadcrumb_header <- function(x) {
 #' Read Daily Breadcrumb
 #'
 #' @param file breadcrumb to read
-#' @param verbose whether to print header type messages
 #'
 #' @return tibble of properly formatted breadcrumb data according to
-#' `master_breadcrumb_template`
+#' `master_crumb_template`
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' read_daily_breadcrumb("Breadcrumb_07Nov2017.csv")
+#' read_daily_crumb("Breadcrumb_07Nov2017.csv")
 #' }
 #'
 #' @note Breadcrumb files are inconsistently formatted. Known issues include
@@ -173,17 +131,13 @@ read_daily_breadcrumb_header <- function(x) {
 #' some included fields are inconsistent from one file to the next - especially
 #' the datetimes vs date and time issue. This function explicitly reads the
 #' file according to the file header in an effort to detect data issues.
-read_daily_breadcrumb <- function(file, verbose = FALSE) {
-  header <- read_daily_breadcrumb_header(file)
+read_daily_crumb <- function(file) {
+  header <- read_daily_crumb_header(file)
 
   contents <- NULL
 
   # Type 1
-  if (header == daily_breadcrumb_headers[1]) {
-    if (verbose) {
-      message(sprintf("Daily breadcrumb %s contains a Type 1 header.", file))
-    }
-
+  if (header == daily_crumb_headers$header[1]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -212,11 +166,7 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
   }
 
   # Type 2
-  if (header == daily_breadcrumb_headers[2]) {
-    if (verbose) {
-      message(sprintf("Daily breadcrumb %s contains a Type 2 header.", file))
-    }
-
+  if (header == daily_crumb_headers$header[2]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -243,11 +193,7 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
   }
 
   # Type 3
-  if (header == daily_breadcrumb_headers[3]) {
-    if (verbose) {
-      message(sprintf("Daily breadcrumb %s contains a Type 3 header.", file))
-    }
-
+  if (header == daily_crumb_headers$header[3]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -275,11 +221,7 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
   }
 
   # Type 4
-  if (header == daily_breadcrumb_headers[4]) {
-    if (verbose) {
-      message(sprintf("Daily breadcrumb %s contains a Type 4 header.", file))
-    }
-
+  if (header == daily_crumb_headers$header[4]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -290,19 +232,19 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
         Event_Name            = readr::col_character(),
         Address               = readr::col_character(),
         Event_Type            = readr::col_character(),
-        # Timestamp specification is inconsistent
-        # read as character and deal with later
+        # Timestamp specification is inconsistent across daily files
+        # - read as character and deal with later
         Timestamp             = readr::col_character(),
         Odometer_Reading      = readr::col_double(),
         GPS_Fix_Quality       = readr::col_double(),
-        # begin: these fields sometimes contain a '.'
+        # begin: in some daily files these fields contain a '.'
         Peak_Speed            = readr::col_double(),
         Average_Speed         = readr::col_double(),
         Initial_Speed         = readr::col_double(),
         Final_Speed           = readr::col_double(),
         Previous_Fuel_Level   = readr::col_double(),
         New_Fuel_Level        = readr::col_double(),
-        # end: these fields sometimes contain a '.'
+        # end: in some daily files these fields contain a '.'
         Nearest_Landmark_Name = readr::col_character()
       ),
       na = c("", "NA", ".")
@@ -336,15 +278,11 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
     }
 
     contents %>%
-      dplyr::select(-Timestamp)
+      dplyr::select(-Timestamp) -> contents
   }
 
   # Type 5
-  if (header == daily_breadcrumb_headers[5]) {
-    if (verbose) {
-      message(sprintf("Daily breadcrumb %s contains a Type 5 header.", file))
-    }
-
+  if (header == daily_crumb_headers$header[5]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -371,11 +309,7 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
   }
 
   # Type 6
-  if (header == daily_breadcrumb_headers[6]) {
-    if (verbose) {
-      message(sprintf("Daily breadcrumb %s contains a Type 6 header.", file))
-    }
-
+  if (header == daily_crumb_headers$header[6]) {
     contents <- readr::read_csv(
       file,
       col_types = readr::cols(
@@ -405,11 +339,7 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
   }
 
   # Type 7
-  if (header == daily_breadcrumb_headers[7]) {
-    if (verbose) {
-      message(sprintf("Daily breadcrumb %s contains a Type 7 header.", file))
-    }
-
+  if (header == daily_crumb_headers$header[7]) {
     contents <- readr::read_delim(
       file,
       delim = ";",
@@ -448,12 +378,12 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
           file
         ),
         sprintf(
-          "Need to append `daily_breadcrumb_headers` with <%s>",
+          "Need to append `daily_crumb_headers` with <%s>",
           header
         ),
         sprintf(
           "and add section in `%s` for daily breadcrumbs like `%s`",
-          "read_daily_breadcrumb()",
+          "read_daily_crumb()",
           file
         ),
         collapse = "\n"
@@ -463,14 +393,14 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
 
   contents %>%
     janitor::clean_names() %>%
-    dplyr::bind_rows(master_breadcrumb_template, .)
+    dplyr::bind_rows(master_crumb_template, .)
 }
 
 
 
 #' Collate Daily Breadcrumb Metadata
 #'
-#' @param breadcrumb_directory directory containing the breadcrumb files
+#' @param crumb_directory directory containing the breadcrumb files
 #'
 #' @return tibble containing `file` as full path to each breadcrumb and `date`
 #' as extracted from the breadcrumb file name.
@@ -479,12 +409,12 @@ read_daily_breadcrumb <- function(file, verbose = FALSE) {
 #' @examples
 #' \dontrun{
 #' ris_storage_path("Reports") %>%
-#'   collate_daily_breadcrumb_metadata()
+#'   collate_daily_crumb_metadata()
 #' }
-collate_daily_breadcrumb_metadata <- function(breadcrumb_directory) {
+collate_daily_crumb_metadata <- function(crumb_directory) {
   dplyr::tibble(
     file = list.files(
-      path = breadcrumb_directory,
+      path = crumb_directory,
       pattern = "^Breadcrumb",
       full.names = TRUE
     )
@@ -502,38 +432,38 @@ collate_daily_breadcrumb_metadata <- function(breadcrumb_directory) {
       # this produces warning messages that do not apply to the final results
       # we will suppress all warnings for now and check for errors later
       date = dplyr::case_when(
-        stringr::str_detect(file_basename, daily_breadcrumb_name_patterns[1]) ~
+        stringr::str_detect(file_basename, daily_crumb_name_patterns[1]) ~
           suppressWarnings(
             lubridate::as_date(file_date_string, format = "%d%b%Y")),
-        stringr::str_detect(file_basename, daily_breadcrumb_name_patterns[2]) ~
+        stringr::str_detect(file_basename, daily_crumb_name_patterns[2]) ~
           suppressWarnings(
             lubridate::as_date(file_date_string, format = "%d%B%Y")),
-        stringr::str_detect(file_basename, daily_breadcrumb_name_patterns[3]) ~
+        stringr::str_detect(file_basename, daily_crumb_name_patterns[3]) ~
           suppressWarnings(
             lubridate::as_date(file_date_string, format = "%d_%B_%Y")),
-        stringr::str_detect(file_basename, daily_breadcrumb_name_patterns[4]) ~
+        stringr::str_detect(file_basename, daily_crumb_name_patterns[4]) ~
           suppressWarnings(
             lubridate::as_date(file_date_string)),
         TRUE ~ lubridate::NA_Date_
       )
     ) %>%
-    dplyr::select(file, date) -> daily_breadcrumb_names_and_dates
+    dplyr::select(file, date) -> daily_crumb_names_and_dates
 
-  daily_breadcrumb_names_and_dates %>%
+  daily_crumb_names_and_dates %>%
     dplyr::filter(is.na(date)) %>%
-    dplyr::pull(file) -> undated_daily_breadcrumb_names
+    dplyr::pull(file) -> undated_daily_crumb_names
 
-  if (length(undated_daily_breadcrumb_names) > 0) {
+  if (length(undated_daily_crumb_names) > 0) {
     stop(
       sprintf(
         "Date extraction failed for %i breadcrumb files starting with %s.",
-        length(undated_daily_breadcrumb_names),
-        undated_daily_breadcrumb_names[1]
+        length(undated_daily_crumb_names),
+        undated_daily_crumb_names[1]
       )
     )
   }
 
-  daily_breadcrumb_names_and_dates %>%
+  daily_crumb_names_and_dates %>%
     dplyr::arrange(date)
 }
 
@@ -548,11 +478,11 @@ collate_daily_breadcrumb_metadata <- function(breadcrumb_directory) {
 #'
 #' @examples
 #' \dontrun{
-#' read_collated_breadcrumb("breadcrumb_2015-01-01_to_2015-02-01.csv")
+#' read_collated_crumb("breadcrumb_2015-01-01_to_2015-02-01.csv")
 #' }
 #'
-#' @note Read is based on `master_breadcrumb_template` format.
-read_collated_breadcrumb <- function(x) {
+#' @note Read is based on `master_crumb_template` format.
+read_collated_crumb <- function(x) {
   readr::read_csv(x, col_types = "cdddcccDtddddddddcdcddd")
 }
 
@@ -560,8 +490,8 @@ read_collated_breadcrumb <- function(x) {
 
 #' Write a Timespan Breadcrumb
 #'
-#' @param daily_breadcrumb_metadata tibble of breadcrumb names and dates from
-#' `collate_daily_breadcrumb_metadata()`
+#' @param daily_crumb_metadata tibble of breadcrumb names and dates from
+#' `collate_daily_crumb_metadata()`
 #' @param d0 start date (e.g., '2022-01-01')
 #' @param d1 end date (e.g., '2022-02-01')
 #'
@@ -571,24 +501,24 @@ read_collated_breadcrumb <- function(x) {
 #' @examples
 #' \dontrun{
 #' ris_storage_path("Reports") %>%
-#'   collate_daily_breadcrumb_metadata() %>%
-#'   write_timespan_breadcrumb("2022-01-01", "2022-02-01")
+#'   collate_daily_crumb_metadata() %>%
+#'   write_timespan_crumb("2022-01-01", "2022-02-01")
 #' }
-write_timespan_breadcrumb <- function(daily_breadcrumb_metadata, d0, d1) {
+write_timespan_crumb <- function(daily_crumb_metadata, d0, d1) {
   csv <- sprintf("breadcrumb_%s_to_%s.csv", d0, d1)
 
-  daily_breadcrumb_metadata %>%
-    dplyr::filter(d0 <= date, date < d1) -> filtered_daily_breadcrumb_metadata
+  daily_crumb_metadata %>%
+    dplyr::filter(d0 <= date, date < d1) -> filtered_daily_crumb_metadata
 
   message(
     sprintf(
       "Collating %i daily breadcrumb files from %s to %s into %s.",
-      nrow(filtered_daily_breadcrumb_metadata), d0, d1, csv
+      nrow(filtered_daily_crumb_metadata), d0, d1, csv
     )
   )
 
-  filtered_daily_breadcrumb_metadata %>%
-    purrr::pmap_dfr(function(file, ...) read_daily_breadcrumb(file)) %>%
+  filtered_daily_crumb_metadata %>%
+    purrr::pmap_dfr(function(file, ...) read_daily_crumb(file)) %>%
     readr::write_csv(csv, na = "")
 
   invisible(csv)
@@ -598,8 +528,8 @@ write_timespan_breadcrumb <- function(daily_breadcrumb_metadata, d0, d1) {
 
 #' Write Monthly Breadcrumbs for Year
 #'
-#' @param daily_breadcrumb_metadata tibble of breadcrumb names and dates from
-#' `collate_daily_breadcrumb_metadata()`
+#' @param daily_crumb_metadata tibble of breadcrumb names and dates from
+#' `collate_daily_crumb_metadata()`
 #' @param year the desired year
 #'
 #' @return names of the timespan (monthly) breadcrumb files
@@ -608,11 +538,11 @@ write_timespan_breadcrumb <- function(daily_breadcrumb_metadata, d0, d1) {
 #' @examples
 #' \dontrun{
 #' ris_storage_path("Reports") %>%
-#'   collate_daily_breadcrumb_metadata() %>%
-#'   write_monthly_breadcrumbs_for_year(2015)
+#'   collate_daily_crumb_metadata() %>%
+#'   write_monthly_crumbs_for_year(2015)
 #' }
-write_monthly_breadcrumbs_for_year <- function(
-  daily_breadcrumb_metadata,
+write_monthly_crumbs_for_year <- function(
+  daily_crumb_metadata,
   year
 ) {
   dplyr::tibble(
@@ -620,8 +550,8 @@ write_monthly_breadcrumbs_for_year <- function(
     d1 = c(sprintf("%i-%02d-01", year, 2:12), sprintf("%i-01-01", year + 1))
   ) %>%
     purrr::pmap_chr(
-      write_timespan_breadcrumb,
-      daily_breadcrumb_metadata = daily_breadcrumb_metadata
+      write_timespan_crumb,
+      daily_crumb_metadata = daily_crumb_metadata
     )
 }
 
@@ -629,30 +559,32 @@ write_monthly_breadcrumbs_for_year <- function(
 
 #' Collate Monthly Breadcrumbs
 #'
-#' @param monthly_breadcrumb_files names of the monthly breadcrumb files to
-#' collate (i.e., return value from `write_monthly_breadcrumbs_for_year()`)
+#' @param monthly_crumb_files names of the monthly breadcrumb files to
+#' collate (i.e., return value from `write_monthly_crumbs_for_year()`)
+#' @param debug output word counts for all monthly and the year breadcrumb files
+#' to see if the montly add up to the yearly
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' ris_storage_path("Reports") %>%
-#'   collate_daily_breadcrumb_metadata() %>%
-#'   write_monthly_breadcrumbs_for_year(2015) %>%
-#'   collate_monthly_breadcrumbs()
+#'   collate_daily_crumb_metadata() %>%
+#'   write_monthly_crumbs_for_year(2015) %>%
+#'   collate_monthly_crumbs()
 #' }
-collate_monthly_breadcrumbs <- function(
-  monthly_breadcrumb_files,
+collate_monthly_crumbs <- function(
+  monthly_crumb_files,
   debug = FALSE
 ) {
-  year <- stringr::str_extract(monthly_breadcrumb_files[1], "\\d{4}")
-  yearly_breadcrumb_file <- sprintf("breadcrumb_%s.csv", year)
+  year <- stringr::str_extract(monthly_crumb_files[1], "\\d{4}")
+  yearly_crumb_file <- sprintf("breadcrumb_%s.csv", year)
 
   message(
     sprintf(
       "Row-binding %i monthly into yearly breadcrumb file named %s.",
-      length(monthly_breadcrumb_files),
-      yearly_breadcrumb_file
+      length(monthly_crumb_files),
+      yearly_crumb_file
     )
   )
 
@@ -660,9 +592,9 @@ collate_monthly_breadcrumbs <- function(
     "awk",
     paste(
       "'(NR == 1) || (FNR > 1)'",
-      paste(monthly_breadcrumb_files, collapse = " "),
+      paste(monthly_crumb_files, collapse = " "),
       ">",
-      yearly_breadcrumb_file
+      yearly_crumb_file
     )
   )
 
@@ -676,8 +608,8 @@ collate_monthly_breadcrumbs <- function(
 
 #' Remove Monthly Breadcrumb Files
 #'
-#' @param monthly_breadcrumb_files names of the monthly breadcrumb files to
-#' collate (i.e., return value from `write_monthly_breadcrumbs_for_year()`)
+#' @param monthly_crumb_files names of the monthly breadcrumb files to
+#' collate (i.e., return value from `write_monthly_crumbs_for_year()`)
 #'
 #' @export
 #'
@@ -685,17 +617,17 @@ collate_monthly_breadcrumbs <- function(
 #' \dontrun{
 #' # silly example to write breadcrumbs and the immediately delete them
 #' ris_storage_path("Reports") %>%
-#'   collate_daily_breadcrumb_metadata() %>%
-#'   write_monthly_breadcrumbs_for_year(2015) -> monthly_breadcrumb_files
+#'   collate_daily_crumb_metadata() %>%
+#'   write_monthly_crumbs_for_year(2015) -> monthly_crumb_files
 #'
-#' monthly_breadcrumb_files %>%
-#'   collate_monthly_breadcrumbs()
+#' monthly_crumb_files %>%
+#'   collate_monthly_crumbs()
 #'
-#' monthly_breadcrumb_files %>%
-#'   remove_monthly_breadcrumbs()
+#' monthly_crumb_files %>%
+#'   remove_monthly_crumbs()
 #' }
-remove_monthly_breadcrumbs <- function(monthly_breadcrumb_files) {
-  system2("rm", paste(c("-f", monthly_breadcrumb_files), collapse = " "))
+remove_monthly_crumbs <- function(monthly_crumb_files) {
+  system2("rm", paste(c("-f", monthly_crumb_files), collapse = " "))
 }
 
 
@@ -718,13 +650,15 @@ remove_monthly_breadcrumbs <- function(monthly_breadcrumb_files) {
 #'   group = "spark.myftp.org"
 #' )
 #'
-#' create_empty_breadcrumb_database_table(con, 2015)
+#' create_crumb_table(con, 2015)
 #'
 #' DBI::dbDisconnect(con)
 #' }
-create_empty_breadcrumb_database_table <- function(con,
-                                                   year,
-                                                   fidelity = c("30", "1")) {
+create_crumb_table <- function(
+  con,
+  year,
+  fidelity = c("30", "1")
+) {
   checkmate::assert_int(year)
   fidelity <- match.arg(fidelity)
   database_table <- sprintf("breadcrumb_%ss_%i", fidelity, year)
@@ -773,8 +707,8 @@ create_empty_breadcrumb_database_table <- function(con,
 #' Insert into Breadcrumb Database Table
 #'
 #' @param con a DBIConnection object, as returned by `dbConnect()`.
-#' @param breadcrumb_database_table name of the database table for insertion
-#' @param monthly_breadcrumb_names names of the monthly breadcrumb files
+#' @param crumb_table name of the database table for insertion
+#' @param monthly_crumb_files names of the monthly breadcrumb files
 #'
 #' @return number of records affected
 #' @export
@@ -782,8 +716,8 @@ create_empty_breadcrumb_database_table <- function(con,
 #' @examples
 #' \dontrun{
 #' ris_storage_path("Reports") %>%
-#'   collate_daily_breadcrumb_metadata() %>%
-#'   write_monthly_breadcrumbs_for_year(2015) -> monthly_breadcrumb_files
+#'   collate_daily_crumb_metadata() %>%
+#'   write_monthly_crumbs_for_year(2015) -> monthly_crumb_files
 #'
 #' con <- DBI::dbConnect(
 #'   RMariaDB::MariaDB(),
@@ -791,29 +725,31 @@ create_empty_breadcrumb_database_table <- function(con,
 #'   group = "spark.myftp.org"
 #' )
 #'
-#' create_empty_breadcrumb_database_table(
+#' create_crumb_table(
 #'   con, 2015
-#' ) -> breadcrumb_database_table
+#' ) -> crumb_table
 #'
-#' insert_into_breadcrumb_database_table(
-#'   con, breadcrumb_database_table, monthly_breadcrumb_files
+#' insert_into_crumb_table(
+#'   con, crumb_table, monthly_crumb_files
 #' )
 #'
 #' DBI::dbDisconnect(con)
 #' }
-insert_into_breadcrumb_database_table <- function(con,
-                                                  breadcrumb_database_table,
-                                                  monthly_breadcrumb_files) {
-  purrr::map_dbl(monthly_breadcrumb_files, ~ {
+insert_into_crumb_table <- function(
+  con,
+  crumb_table,
+  monthly_crumb_files
+) {
+  purrr::map_dbl(monthly_crumb_files, ~ {
     message("Reading monthly breadcrumb file ", .x, "...")
     if (file.size(.x) > 0) {
-      read_collated_breadcrumb(.x) %>%
-        DBI::dbAppendTable(con, breadcrumb_database_table, .)
+      read_collated_crumb(.x) %>%
+        DBI::dbAppendTable(con, crumb_table, .)
     } else {
       0
     }
   }) -> n_records
 
-  names(n_records) <- monthly_breadcrumb_files
+  names(n_records) <- monthly_crumb_files
   return(n_records)
 }

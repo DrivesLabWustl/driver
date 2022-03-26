@@ -32,7 +32,12 @@ Imports:
     censusapi,
     rgeocodio,
     rlang,
-    checkmate
+    checkmate,
+    stringr,
+    purrr,
+    hms,
+    lubridate,
+    DBI
 Remotes:
     hrbrmstr/rgeocodio
 RoxygenNote: 7.1.2
