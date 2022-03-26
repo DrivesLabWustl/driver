@@ -391,9 +391,10 @@ read_daily_crumb <- function(file) {
     )
   }
 
-  contents %>%
-    janitor::clean_names() %>%
-    dplyr::bind_rows(driver::master_crumb_template, .data)
+  dplyr::bind_rows(
+    driver::master_crumb_template,
+    janitor::clean_names(contents)
+  )
 }
 
 
