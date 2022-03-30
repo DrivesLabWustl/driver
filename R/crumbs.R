@@ -398,6 +398,7 @@ read_daily_crumb <- function(file) {
         Nearest_Landmark_Name = readr::col_character()
       )
     )
+  }
 
   if (is.null(contents)) {
     stop(
