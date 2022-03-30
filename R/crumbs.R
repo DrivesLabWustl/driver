@@ -370,6 +370,35 @@ read_daily_crumb <- function(file) {
       dplyr::select(-Timestamp)
   }
 
+  # Type 8
+  if (header == driver::daily_crumb_headers$header[8]) {
+    contents <- readr::read_csv(
+      file,
+      col_types = readr::cols(
+        Vehicle_Name          = readr::col_character(),
+        Latitude              = readr::col_double(),
+        Longitude             = readr::col_double(),
+        Vehicle_Speed         = readr::col_double(),
+        `Speed Limit`         = readr::col_double(),
+        Difference            = readr::col_double(),
+        Event_Name            = readr::col_character(),
+        Address               = readr::col_character(),
+        Event_Type            = readr::col_character(),
+        Date                  = readr::readr::col_date("%d%b%Y"),
+        Time                  = readr::readr::col_time(format = ""),
+        Odometer_Reading      = readr::col_double(),
+        `Trip Distance`       = readr::col_double(),
+        GPS_Fix_Quality       = readr::col_double(),
+        Peak_Speed            = readr::col_double(),
+        Average_Speed         = readr::col_double(),
+        Initial_Speed         = readr::col_double(),
+        Final_Speed           = readr::col_double(),
+        Previous_Fuel_Level   = readr::col_double(),
+        New_Fuel_Level        = readr::col_double(),
+        Nearest_Landmark_Name = readr::col_character()
+      )
+    )
+
   if (is.null(contents)) {
     stop(
       paste(
