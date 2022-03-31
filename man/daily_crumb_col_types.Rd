@@ -11,6 +11,6 @@ An object of class \code{list} of length 7.
 daily_crumb_col_types
 }
 \description{
-List of functions that each provide the col spec for the given header class.
+List of functions that each provide the col spec for the given header type
 }
 \keyword{datasets}

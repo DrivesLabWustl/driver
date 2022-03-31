@@ -114,7 +114,7 @@ read_daily_crumb_header <- function(x) {
 
 #' Daily Breadcrumb Column Types
 #'
-#' List of functions that each provide the col spec for the given header class.
+#' List of functions that each provide the col spec for the given header type
 #'
 #' @export
 daily_crumb_col_types <- list(
@@ -403,9 +403,9 @@ read_daily_crumb <- function(file) {
 
   driver::daily_crumb_headers %>%
     dplyr::filter(.data[["header"]] == .env[["header"]]) %>%
-    dplyr::pull(class) -> class
+    dplyr::pull(type) -> type
 
-  contents <- daily_crumb_readers[[class]](file)
+  contents <- daily_crumb_readers[[type]](file)
 
   if (is.null(contents)) {
     stop(
