@@ -112,6 +112,273 @@ read_daily_crumb_header <- function(x) {
 
 
 
+#' Daily Breadcrumb Column Types
+#'
+#' List of functions that each provide the col spec for the given header class.
+#'
+#' @export
+daily_crumb_col_types <- list(
+  daily_crumb_col_type_1 = function() {
+    readr::cols(
+      Vehicle_Name     = readr::col_character(),
+      Driver_Name      = readr::col_character(),
+      Occupants        = readr::col_number(),
+      Latitude         = readr::col_double(),
+      Longitude        = readr::col_double(),
+      Vehicle_Speed    = readr::col_double(),
+      `Speed Limit`    = readr::col_double(),
+      Difference       = readr::col_double(),
+      Event_Name       = readr::col_character(),
+      Address          = readr::col_character(),
+      Event_Type       = readr::col_character(),
+      Date             = readr::col_date(format = "%d%b%Y"),
+      Time             = readr::col_time(format = ""),
+      Odometer_Reading = readr::col_double(),
+      `Trip Distance`  = readr::col_double(),
+      GPS_Fix_Quality  = readr::col_double(),
+      Peak_Speed       = readr::col_double(),
+      Average_Speed    = readr::col_double(),
+      Initial_Speed    = readr::col_double(),
+      Final_Speed      = readr::col_double()
+    )
+  },
+  daily_crumb_col_type_2 = function() {
+    readr::cols(
+      Vehicle_Name          = readr::col_character(),
+      Latitude              = readr::col_double(),
+      Longitude             = readr::col_double(),
+      Vehicle_Speed         = readr::col_double(),
+      Event_Name            = readr::col_character(),
+      Address               = readr::col_character(),
+      Event_Type            = readr::col_character(),
+      Date                  = readr::col_date(format = "%d%b%Y"),
+      Time                  = readr::col_time(format = ""),
+      Odometer_Reading      = readr::col_double(),
+      GPS_Fix_Quality       = readr::col_double(),
+      Peak_Speed            = readr::col_double(),
+      Average_Speed         = readr::col_double(),
+      Initial_Speed         = readr::col_double(),
+      Final_Speed           = readr::col_double(),
+      Previous_Fuel_Level   = readr::col_double(),
+      New_Fuel_Level        = readr::col_double(),
+      Nearest_Landmark_Name = readr::col_character()
+    )
+  },
+  daily_crumb_col_type_3 = function() {
+    readr::cols(
+      Vehicle_Name          = readr::col_character(),
+      Latitude              = readr::col_double(),
+      Longitude             = readr::col_double(),
+      Vehicle_Speed         = readr::col_double(),
+      Event_Name            = readr::col_character(),
+      Address               = readr::col_character(),
+      Event_Type            = readr::col_character(),
+      Date                  = readr::col_date("%d%b%Y"),
+      Time                  = readr::col_time(format = ""),
+      Odometer_Reading      = readr::col_double(),
+      `Trip Distance`       = readr::col_double(),
+      GPS_Fix_Quality       = readr::col_double(),
+      Peak_Speed            = readr::col_double(),
+      Average_Speed         = readr::col_double(),
+      Initial_Speed         = readr::col_double(),
+      Final_Speed           = readr::col_double(),
+      Previous_Fuel_Level   = readr::col_double(),
+      New_Fuel_Level        = readr::col_double(),
+      Nearest_Landmark_Name = readr::col_character()
+    )
+  },
+  daily_crumb_col_type_4 = function() {
+    readr::cols(
+      Vehicle_Name          = readr::col_character(),
+      Latitude              = readr::col_double(),
+      Longitude             = readr::col_double(),
+      Vehicle_Speed         = readr::col_double(),
+      Event_Name            = readr::col_character(),
+      Address               = readr::col_character(),
+      Event_Type            = readr::col_character(),
+      # Timestamp specification is inconsistent across daily files
+      # - read as character and deal with later
+      Timestamp             = readr::col_character(),
+      Odometer_Reading      = readr::col_double(),
+      GPS_Fix_Quality       = readr::col_double(),
+      Peak_Speed            = readr::col_double(),
+      Average_Speed         = readr::col_double(),
+      Initial_Speed         = readr::col_double(),
+      Final_Speed           = readr::col_double(),
+      Previous_Fuel_Level   = readr::col_double(),
+      New_Fuel_Level        = readr::col_double(),
+      Nearest_Landmark_Name = readr::col_character()
+    )
+  },
+  daily_crumb_col_type_5 = function() {
+    readr::cols(
+      Vehicle_Name     = readr::col_character(),
+      Latitude         = readr::col_double(),
+      Longitude        = readr::col_double(),
+      Vehicle_Speed    = readr::col_double(),
+      `Speed Limit`    = readr::col_double(),
+      Difference       = readr::col_double(),
+      Event_Name       = readr::col_character(),
+      Address          = readr::col_character(),
+      Event_Type       = readr::col_character(),
+      Date             = readr::col_date("%d%b%Y"),
+      Time             = readr::col_time(format = ""),
+      Odometer_Reading = readr::col_double(),
+      `Trip Distance`  = readr::col_double(),
+      GPS_Fix_Quality  = readr::col_double(),
+      Peak_Speed       = readr::col_double(),
+      Average_Speed    = readr::col_double(),
+      Initial_Speed    = readr::col_double(),
+      Final_Speed      = readr::col_double()
+    )
+  },
+  daily_crumb_col_type_6 = function() {
+    readr::cols(
+      Vehicle_Name          = readr::col_character(),
+      Latitude              = readr::col_double(),
+      Longitude             = readr::col_double(),
+      Vehicle_Speed         = readr::col_double(),
+      `Speed Limit`         = readr::col_double(),
+      Difference            = readr::col_double(),
+      Event_Name            = readr::col_character(),
+      Address               = readr::col_character(),
+      Event_Type            = readr::col_character(),
+      Date                  = readr::col_date("%d%b%Y"),
+      Time                  = readr::col_time(format = ""),
+      Odometer_Reading      = readr::col_double(),
+      `Trip Distance`       = readr::col_double(),
+      GPS_Fix_Quality       = readr::col_double(),
+      Peak_Speed            = readr::col_double(),
+      Average_Speed         = readr::col_double(),
+      Initial_Speed         = readr::col_double(),
+      Final_Speed           = readr::col_double(),
+      Previous_Fuel_Level   = readr::col_double(),
+      New_Fuel_Level        = readr::col_double(),
+      Nearest_Landmark_Name = readr::col_character()
+    )
+  },
+  daily_crumb_col_type_7 = function() {
+    readr::cols(
+      `Vehicle Name`          = readr::col_character(),
+      Latitude                = readr::col_double(),
+      Longitude               = readr::col_double(),
+      `Vehicle Speed`         = readr::col_double(),
+      `Event Name`            = readr::col_character(),
+      Address                 = readr::col_character(),
+      `Event Type`            = readr::col_character(),
+      Timestamp               = readr::col_datetime(format = ""),
+      `Odometer Reading`      = readr::col_double(),
+      `GPS Fix Quality`       = readr::col_double(),
+      `Peak Speed`            = readr::col_double(),
+      `Average Speed`         = readr::col_double(),
+      `Initial Speed`         = readr::col_double(),
+      `Final Speed`           = readr::col_double(),
+      `Previous Fuel Level`   = readr::col_double(),
+      `New Fuel Level`        = readr::col_double(),
+      `Nearest Landmark Name` = readr::col_character()
+    )
+  }
+)
+
+
+
+#' Daily Breadcrumb Readers
+#'
+#' List of functions that each can read the desired breadcrumb type.
+#'
+#' @export
+daily_crumb_readers <- list(
+  daily_crumb_reader_1 = function(file) {
+    readr::read_csv(
+      file,
+      col_types = daily_crumb_col_types[[1]]()
+    )
+  },
+  daily_crumb_reader_2 = function(file) {
+    readr::read_csv(
+      file,
+      col_types = daily_crumb_col_types[[2]]()
+    )
+  },
+  daily_crumb_reader_3 = function(file) {
+    readr::read_csv(
+      file,
+      col_types = daily_crumb_col_types[[3]]()
+    )
+  },
+  daily_crumb_reader_4 = function(file) {
+    readr::read_csv(
+      file,
+      col_types = daily_crumb_col_types[[4]](),
+      na = c("", "NA", ".")
+    ) %>%
+      dplyr::mutate(
+        # Timestamp specification is inconsistent
+        # case_when evaluates all rhs and keeps desired
+        # this produces warning messages that do not apply to the final results
+        # we will suppress all warnings for now and check for errors later
+        Timestamp = dplyr::case_when(
+          # sometimes the timestamp is specified like '12 June 2015 06:33:58'
+          # requiring a special informat beyond defaults
+          # (%b is for abbreviated month, but it also works for full months)
+          stringr::str_detect(Timestamp, "[a-z]") ~
+            suppressWarnings(
+              lubridate::as_datetime(
+                .data$Timestamp,
+                format = "%d %b %Y %H:%M:%S"
+              )
+            ),
+          # and sometimes the datetime is specified like '2022-03-21 01:01:01.0'
+          # this is a default format
+          TRUE ~ suppressWarnings(
+            lubridate::as_datetime(
+              .data$Timestamp
+            )
+          )
+        ),
+        date = lubridate::date(.data$Timestamp),
+        time = hms::as_hms(.data$Timestamp)
+      ) -> contents
+
+    # check for failed timestamp parsings
+    contents %>%
+      dplyr::filter(is.na(.data$Timestamp)) %>%
+      nrow() -> n_na_timestamps
+    if (n_na_timestamps > 0) {
+      warning(sprintf("%i, `Timestamp` failed to parse.", n_na_timestamps))
+    }
+
+    contents %>%
+      dplyr::select(-Timestamp) -> contents
+  },
+  daily_crumb_reader_5 = function(file) {
+    readr::read_csv(
+      file,
+      col_types = daily_crumb_col_types[[5]]()
+    )
+  },
+  daily_crumb_reader_6 = function(file) {
+    readr::read_csv(
+      file,
+      col_types = daily_crumb_col_types[[6]]()
+    )
+  },
+  daily_crumb_reader_7 = function(file) {
+    readr::read_delim(
+      file,
+      delim = ";",
+      col_types = daily_crumb_col_types[[7]]()
+    ) %>%
+      dplyr::mutate(
+        date = lubridate::date(Timestamp),
+        time = hms::as_hms(Timestamp)
+      ) %>%
+      dplyr::select(-Timestamp)
+  }
+)
+
+
+
 #' Read Daily Breadcrumb
 #'
 #' @param file breadcrumb to read
@@ -134,259 +401,20 @@ read_daily_crumb_header <- function(x) {
 read_daily_crumb <- function(file) {
   header <- read_daily_crumb_header(file)
 
-  contents <- NULL
+  driver::daily_crumb_headers %>%
+    dplyr::filter(.data[["header"]] == .env[["header"]]) %>%
+    dplyr::pull(class) -> class
 
-  # Type 1
-  if (header == driver::daily_crumb_headers$header[1]) {
-    contents <- readr::read_csv(
-      file,
-      col_types = readr::cols(
-        Vehicle_Name     = readr::col_character(),
-        Driver_Name      = readr::col_character(),
-        Occupants        = readr::col_number(),
-        Latitude         = readr::col_double(),
-        Longitude        = readr::col_double(),
-        Vehicle_Speed    = readr::col_double(),
-        `Speed Limit`    = readr::col_double(),
-        Difference       = readr::col_double(),
-        Event_Name       = readr::col_character(),
-        Address          = readr::col_character(),
-        Event_Type       = readr::col_character(),
-        Date             = readr::col_date(format = "%d%b%Y"),
-        Time             = readr::col_time(format = ""),
-        Odometer_Reading = readr::col_double(),
-        `Trip Distance`  = readr::col_double(),
-        GPS_Fix_Quality  = readr::col_double(),
-        Peak_Speed       = readr::col_double(),
-        Average_Speed    = readr::col_double(),
-        Initial_Speed    = readr::col_double(),
-        Final_Speed      = readr::col_double()
-      )
-    )
-  }
-
-  # Type 2
-  if (header == driver::daily_crumb_headers$header[2]) {
-    contents <- readr::read_csv(
-      file,
-      col_types = readr::cols(
-        Vehicle_Name          = readr::col_character(),
-        Latitude              = readr::col_double(),
-        Longitude             = readr::col_double(),
-        Vehicle_Speed         = readr::col_double(),
-        Event_Name            = readr::col_character(),
-        Address               = readr::col_character(),
-        Event_Type            = readr::col_character(),
-        Date                  = readr::col_date(format = "%d%b%Y"),
-        Time                  = readr::col_time(format = ""),
-        Odometer_Reading      = readr::col_double(),
-        GPS_Fix_Quality       = readr::col_double(),
-        Peak_Speed            = readr::col_double(),
-        Average_Speed         = readr::col_double(),
-        Initial_Speed         = readr::col_double(),
-        Final_Speed           = readr::col_double(),
-        Previous_Fuel_Level   = readr::col_double(),
-        New_Fuel_Level        = readr::col_double(),
-        Nearest_Landmark_Name = readr::col_character()
-      )
-    )
-  }
-
-  # Type 3
-  if (header == driver::daily_crumb_headers$header[3]) {
-    contents <- readr::read_csv(
-      file,
-      col_types = readr::cols(
-        Vehicle_Name          = readr::col_character(),
-        Latitude              = readr::col_double(),
-        Longitude             = readr::col_double(),
-        Vehicle_Speed         = readr::col_double(),
-        Event_Name            = readr::col_character(),
-        Address               = readr::col_character(),
-        Event_Type            = readr::col_character(),
-        Date                  = readr::col_date("%d%b%Y"),
-        Time                  = readr::col_time(format = ""),
-        Odometer_Reading      = readr::col_double(),
-        `Trip Distance`       = readr::col_double(),
-        GPS_Fix_Quality       = readr::col_double(),
-        Peak_Speed            = readr::col_double(),
-        Average_Speed         = readr::col_double(),
-        Initial_Speed         = readr::col_double(),
-        Final_Speed           = readr::col_double(),
-        Previous_Fuel_Level   = readr::col_double(),
-        New_Fuel_Level        = readr::col_double(),
-        Nearest_Landmark_Name = readr::col_character()
-      )
-    )
-  }
-
-  # Type 4
-  if (header == driver::daily_crumb_headers$header[4]) {
-    contents <- readr::read_csv(
-      file,
-      col_types = readr::cols(
-        Vehicle_Name          = readr::col_character(),
-        Latitude              = readr::col_double(),
-        Longitude             = readr::col_double(),
-        Vehicle_Speed         = readr::col_double(),
-        Event_Name            = readr::col_character(),
-        Address               = readr::col_character(),
-        Event_Type            = readr::col_character(),
-        # Timestamp specification is inconsistent across daily files
-        # - read as character and deal with later
-        Timestamp             = readr::col_character(),
-        Odometer_Reading      = readr::col_double(),
-        GPS_Fix_Quality       = readr::col_double(),
-        # begin: in some daily files these fields contain a '.'
-        Peak_Speed            = readr::col_double(),
-        Average_Speed         = readr::col_double(),
-        Initial_Speed         = readr::col_double(),
-        Final_Speed           = readr::col_double(),
-        Previous_Fuel_Level   = readr::col_double(),
-        New_Fuel_Level        = readr::col_double(),
-        # end: in some daily files these fields contain a '.'
-        Nearest_Landmark_Name = readr::col_character()
-      ),
-      na = c("", "NA", ".")
-    ) %>%
-      dplyr::mutate(
-        # Timestamp specification is inconsistent
-        # case_when evaluates all rhs and keeps desired
-        # this produces warning messages that do not apply to the final results
-        # we will suppress all warnings for now and check for errors later
-        Timestamp = dplyr::case_when(
-          # sometimes the timestamp is specified like '12 June 2015 06:33:58'
-          # requiring a special informat beyond defaults
-          # (%b is for abbreviated month, but it also works for full months)
-          stringr::str_detect(Timestamp, "[a-z]") ~
-            suppressWarnings(
-              lubridate::as_datetime(.data$Timestamp, format = "%d %b %Y %H:%M:%S")),
-          # and sometimes the datetime is specified like '2022-03-21 01:01:01.0'
-          # this is a default format
-          TRUE ~ suppressWarnings(lubridate::as_datetime(.data$Timestamp))
-        ),
-        date = lubridate::date(.data$Timestamp),
-        time = hms::as_hms(.data$Timestamp)
-      )
-
-    # check for failed timestamp parsings
-    contents %>%
-      dplyr::filter(is.na(.data$Timestamp)) %>%
-      nrow() -> n_na_timestamps
-    if (n_na_timestamps > 0) {
-      warning(sprintf("%i, `Timestamp` failed to parse.", n_na_timestamps))
-    }
-
-    contents %>%
-      dplyr::select(-Timestamp) -> contents
-  }
-
-  # Type 5
-  if (header == driver::daily_crumb_headers$header[5]) {
-    contents <- readr::read_csv(
-      file,
-      col_types = readr::cols(
-        Vehicle_Name     = readr::col_character(),
-        Latitude         = readr::col_double(),
-        Longitude        = readr::col_double(),
-        Vehicle_Speed    = readr::col_double(),
-        `Speed Limit`    = readr::col_double(),
-        Difference       = readr::col_double(),
-        Event_Name       = readr::col_character(),
-        Address          = readr::col_character(),
-        Event_Type       = readr::col_character(),
-        Date             = readr::col_date("%d%b%Y"),
-        Time             = readr::col_time(format = ""),
-        Odometer_Reading = readr::col_double(),
-        `Trip Distance`  = readr::col_double(),
-        GPS_Fix_Quality  = readr::col_double(),
-        Peak_Speed       = readr::col_double(),
-        Average_Speed    = readr::col_double(),
-        Initial_Speed    = readr::col_double(),
-        Final_Speed      = readr::col_double()
-      )
-    )
-  }
-
-  # Type 6
-  if (header == driver::daily_crumb_headers$header[6]) {
-    contents <- readr::read_csv(
-      file,
-      col_types = readr::cols(
-        Vehicle_Name          = readr::col_character(),
-        Latitude              = readr::col_double(),
-        Longitude             = readr::col_double(),
-        Vehicle_Speed         = readr::col_double(),
-        `Speed Limit`         = readr::col_double(),
-        Difference            = readr::col_double(),
-        Event_Name            = readr::col_character(),
-        Address               = readr::col_character(),
-        Event_Type            = readr::col_character(),
-        Date                  = readr::col_date("%d%b%Y"),
-        Time                  = readr::col_time(format = ""),
-        Odometer_Reading      = readr::col_double(),
-        `Trip Distance`       = readr::col_double(),
-        GPS_Fix_Quality       = readr::col_double(),
-        Peak_Speed            = readr::col_double(),
-        Average_Speed         = readr::col_double(),
-        Initial_Speed         = readr::col_double(),
-        Final_Speed           = readr::col_double(),
-        Previous_Fuel_Level   = readr::col_double(),
-        New_Fuel_Level        = readr::col_double(),
-        Nearest_Landmark_Name = readr::col_character()
-      )
-    )
-  }
-
-  # Type 7
-  if (header == driver::daily_crumb_headers$header[7]) {
-    contents <- readr::read_delim(
-      file,
-      delim = ";",
-      col_types = readr::cols(
-        `Vehicle Name`          = readr::col_character(),
-        Latitude                = readr::col_double(),
-        Longitude               = readr::col_double(),
-        `Vehicle Speed`         = readr::col_double(),
-        `Event Name`            = readr::col_character(),
-        Address                 = readr::col_character(),
-        `Event Type`            = readr::col_character(),
-        Timestamp               = readr::col_datetime(format = ""),
-        `Odometer Reading`      = readr::col_double(),
-        `GPS Fix Quality`       = readr::col_double(),
-        `Peak Speed`            = readr::col_double(),
-        `Average Speed`         = readr::col_double(),
-        `Initial Speed`         = readr::col_double(),
-        `Final Speed`           = readr::col_double(),
-        `Previous Fuel Level`   = readr::col_double(),
-        `New Fuel Level`        = readr::col_double(),
-        `Nearest Landmark Name` = readr::col_character()
-      )
-    ) %>%
-      dplyr::mutate(
-        date = lubridate::date(Timestamp),
-        time = hms::as_hms(Timestamp)
-      ) %>%
-      dplyr::select(-Timestamp)
-  }
+  contents <- daily_crumb_readers[[class]](file)
 
   if (is.null(contents)) {
     stop(
       paste(
-        sprintf(
-          "Don't know how to read daily breadcrumb %s.",
-          file
-        ),
-        sprintf(
-          "Need to append `daily_crumb_headers` with <%s>",
-          header
-        ),
-        sprintf(
-          "and add section in `%s` for daily breadcrumbs like `%s`",
-          "read_daily_crumb()",
-          file
-        ),
-        collapse = "\n"
+        sprintf("Don't know how to read daily breadcrumb %s.", file),
+        sprintf("Need to append `daily_crumb_headers` with <%s>", header),
+        "and add a corresponding cols spec to `daily_crumb_col_types`",
+        "as well as a corresponding reader in `daily_crumb_readers`.",
+        collapse = "\n\n"
       )
     )
   }
@@ -438,7 +466,8 @@ collate_daily_crumb_metadata <- function(crumb_directory) {
           driver::daily_crumb_name_patterns[1]
         ) ~
           suppressWarnings(
-            lubridate::as_date(.data$file_date_string, format = "%d%b%Y")),
+            lubridate::as_date(.data$file_date_string, format = "%d%b%Y")
+          ),
         stringr::str_detect(
           .data$file_basename,
           driver::daily_crumb_name_patterns[2]
@@ -446,7 +475,8 @@ collate_daily_crumb_metadata <- function(crumb_directory) {
           suppressWarnings(
             lubridate::as_date(
               .data$file_date_string,
-              format = "%d%B%Y")
+              format = "%d%B%Y"
+            )
           ),
         stringr::str_detect(
           .data$file_basename,
@@ -455,14 +485,16 @@ collate_daily_crumb_metadata <- function(crumb_directory) {
           suppressWarnings(
             lubridate::as_date(
               .data$file_date_string,
-              format = "%d_%B_%Y")
+              format = "%d_%B_%Y"
+            )
           ),
         stringr::str_detect(
           .data$file_basename,
           driver::daily_crumb_name_patterns[4]
         ) ~
           suppressWarnings(
-            lubridate::as_date(.data$file_date_string)),
+            lubridate::as_date(.data$file_date_string)
+          ),
         TRUE ~ lubridate::NA_Date_
       )
     ) %>%
@@ -563,10 +595,8 @@ write_timespan_crumb <- function(daily_crumb_metadata, d0, d1) {
 #'   collate_daily_crumb_metadata() %>%
 #'   write_monthly_crumbs_for_year(2015)
 #' }
-write_monthly_crumbs_for_year <- function(
-  daily_crumb_metadata,
-  year
-) {
+write_monthly_crumbs_for_year <- function(daily_crumb_metadata,
+                                          year) {
   dplyr::tibble(
     d0 = sprintf("%i-%02d-01", year, 1:12),
     d1 = c(sprintf("%i-%02d-01", year, 2:12), sprintf("%i-01-01", year + 1))
@@ -595,10 +625,8 @@ write_monthly_crumbs_for_year <- function(
 #'   write_monthly_crumbs_for_year(2015) %>%
 #'   collate_monthly_crumbs()
 #' }
-collate_monthly_crumbs <- function(
-  monthly_crumb_files,
-  debug = FALSE
-) {
+collate_monthly_crumbs <- function(monthly_crumb_files,
+                                   debug = FALSE) {
   year <- stringr::str_extract(monthly_crumb_files[1], "\\d{4}")
   yearly_crumb_file <- sprintf("breadcrumb_%s.csv", year)
 
@@ -676,11 +704,9 @@ remove_monthly_crumbs <- function(monthly_crumb_files) {
 #'
 #' DBI::dbDisconnect(con)
 #' }
-create_crumb_table <- function(
-  con,
-  year,
-  fidelity = c("30", "1")
-) {
+create_crumb_table <- function(con,
+                               year,
+                               fidelity = c("30", "1")) {
   checkmate::assert_int(year)
   fidelity <- match.arg(fidelity)
   database_table <- sprintf("breadcrumb_%ss_%i", fidelity, year)
@@ -757,11 +783,9 @@ create_crumb_table <- function(
 #'
 #' DBI::dbDisconnect(con)
 #' }
-insert_into_crumb_table <- function(
-  con,
-  crumb_table,
-  monthly_crumb_files
-) {
+insert_into_crumb_table <- function(con,
+                                    crumb_table,
+                                    monthly_crumb_files) {
   purrr::map_dbl(monthly_crumb_files, ~ {
     message("Reading monthly breadcrumb file ", .x, "...")
     if (file.size(.x) > 0) {
