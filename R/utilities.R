@@ -45,7 +45,7 @@ tunnel_to_database_server <-
 
     system2(
       command = "xterm",
-      args = sprintf("-e ssh -4 -L 3306:127.0.0.1:3306 %s@%s &", user, server),
+      args = sprintf("-e ssh -4 -L 3306:127.0.0.1:3306 %s@%s", user, server),
       wait = FALSE
     )
   }
