@@ -24,13 +24,13 @@ formal name if supplied.
 }
 \examples{
 ## lookup all associated codes
-kegg_drug_code('acetaminophen')
+kegg_drug_code("acetaminophen")
 
 ## lookup code for formal name
 kegg_drug_code(
-  'acetaminophen',
-  'Acetaminophen (JP18/USP); Paracetamol (INN); Tylenol (TN)'
- )
+  "acetaminophen",
+  "Acetaminophen (JP18/USP); Paracetamol (INN); Tylenol (TN)"
+)
 
 }
 \references{

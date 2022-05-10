@@ -16,7 +16,7 @@ census_block_group_populations(
 \item{vintage}{= Year of dataset, e.g., 2000. This data is only collected
 during decennial censuses.}
 
-\item{key}{= Your Census API key, requested using
+\item{key}{Your Census API key, requested using
 \url{https://api.census.gov/data/key_signup.html}.}
 }
 \value{
@@ -95,15 +95,6 @@ fips_codes_for_states_and_dc \%>\%
     census_block_group_populations
   )) \%>\%
   tidyr::unnest(cols = c(data))
-
-## compute percents urban and rural for each Missouri block group
-census_block_group_populations("29") \%>\%
-  mutate(
-    cen_bgrp_pct_urban_2010 =
-      100 * cen_bgrp_pop_urban_2010 / cen_bgrp_pop_total_2010,
-    cen_bgrp_pct_rural_2010 =
-      100 * cen_bgrp_pop_rural_2010 / cen_bgrp_pop_total_2010
-  )
 }
 
 }

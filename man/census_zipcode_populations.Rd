@@ -13,7 +13,7 @@ census_zipcode_populations(
 \item{vintage}{= Year of dataset, e.g., 2000. This data is only collected
 during decennial censuses.}
 
-\item{key}{= Your Census API key, requested using
+\item{key}{Your Census API key, requested using
 \url{https://api.census.gov/data/key_signup.html}.}
 }
 \value{
@@ -83,15 +83,5 @@ P2
 \dontrun{
 ## data for all zip code tabulation areas
 census_zipcode_populations()
-
-## compute percents urban and rural for each zip code tabulation area
-census_zipcode_populations() \%>\%
-  mutate(
-    cen_zcta_pct_urban_2010 =
-      100 * cen_zcta_pop_urban_2010 / cen_zcta_pop_total_2010,
-    cen_zcta_pct_rural_2010 =
-      100 * cen_zcta_pop_rural_2010 / cen_zcta_pop_total_2010
-  )
 }
-
 }

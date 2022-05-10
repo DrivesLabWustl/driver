@@ -44,13 +44,13 @@ kegg_drug_name <- function(code) {
 #'
 #' @examples
 #' ## lookup all associated codes
-#' kegg_drug_code('acetaminophen')
+#' kegg_drug_code("acetaminophen")
 #'
 #' ## lookup code for formal name
 #' kegg_drug_code(
-#'   'acetaminophen',
-#'   'Acetaminophen (JP18/USP); Paracetamol (INN); Tylenol (TN)'
-#'  )
+#'   "acetaminophen",
+#'   "Acetaminophen (JP18/USP); Paracetamol (INN); Tylenol (TN)"
+#' )
 #'
 #' @references
 #' <https://www.kegg.jp/kegg/drug/>
@@ -61,7 +61,7 @@ kegg_drug_name <- function(code) {
 kegg_drug_code <- function(name, formal = "") {
   results <- kegg_drug_info(name)
 
-  if(nchar(formal) > 0) {
+  if (nchar(formal) > 0) {
     results %>%
       dplyr::filter(name == formal) %>%
       dplyr::pull(code)
