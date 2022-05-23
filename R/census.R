@@ -1,3 +1,36 @@
+#' Geocode a single address
+#'
+#' @param street,city,state,postal_code address components
+#' @param vintage year of dataset, e.g., 2000.
+#' @param key [geocodio](https://geocod.io/) api key
+#'
+#' @return a [tibble::tibble()] containing geocodio data per the request
+#'
+#' @export
+#'
+#' @seealso [rgeocodio::gio_geocode_components()],
+#' [geocodio documentation](https://geocod.io/docs/#fields) for more information
+#'  on costs/pricing.
+census_geocode_components <- function(street,
+                                      city,
+                                      state,
+                                      postal_code,
+                                      vintage = c("2010", "2000"),
+                                      key = Sys.getenv("GEOCODIO_API_KEY")) {
+  vintage <- match.arg(vintage)
+
+  rgeocodio::gio_geocode_components(
+    street = street,
+    city = city,
+    state = state,
+    postal_code = postal_code,
+    fields = sprintf("census%s", vintage),
+    api_key = key
+  )
+}
+
+
+
 #' Parse 12-Digit FIPS Code
 #'
 #' @param x 12-digit FIPS code to parse
