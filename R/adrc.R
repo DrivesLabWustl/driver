@@ -15,9 +15,11 @@ kegg_drug_info <- function(x) {
     httr::GET() %>%
     httr::content() %>%
     readr::read_delim(delim = "\t", col_names = FALSE, col_types = "cc") %>%
-    dplyr::rename(code = .data$X1, name = .data$X2) %>%
+    dplyr::rename(code = .data[["X1"]], name = .data[["X2"]]) %>%
     dplyr::mutate(code = sub("^dr:D", "d", .data$code))
 }
+
+
 
 #' Lookup Drug Name from Code via Kegg.jp
 #'
@@ -33,6 +35,8 @@ kegg_drug_info <- function(x) {
 kegg_drug_name <- function(code) {
   kegg_drug_info(code)$name
 }
+
+
 
 #' Lookup Drug Code(s) from Name via Kegg.jp
 #'
@@ -64,7 +68,7 @@ kegg_drug_code <- function(name, formal = "") {
   if (nchar(formal) > 0) {
     results %>%
       dplyr::filter(name == formal) %>%
-      dplyr::pull(code)
+      dplyr::pull(.data[["code"]])
   } else {
     results$code
   }

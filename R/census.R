@@ -54,6 +54,8 @@ parse_fips_code_12 <- function(x) {
   )
 }
 
+
+
 #' Retrieve Urban and Rural (p2) Summary File 1 (sf1) Census data
 #'
 #' @param state_fips_code Two-digit state code (e.g., "01" == "Alabama").
@@ -189,6 +191,8 @@ census_block_group_populations <-
       )
   }
 
+
+
 #' Lookup Urban and Rural Data for a Given Census Block Group
 #'
 #' @param fips_code_12 12-digit FIPS code
@@ -242,10 +246,10 @@ census_block_group_population <- function(fips_code_12,
   fips_code_components %>%
     dplyr::as_tibble() %>%
     dplyr::rename(
-      !!paste0("cen_bgrp_state_", vintage) := state,
-      !!paste0("cen_bgrp_county_", vintage) := county,
-      !!paste0("cen_bgrp_tract_", vintage) := tract,
-      !!paste0("cen_bgrp_bgrp_", vintage) := block_group
+      !!paste0("cen_bgrp_state_", vintage) := .data[["state"]],
+      !!paste0("cen_bgrp_county_", vintage) := .data[["county"]],
+      !!paste0("cen_bgrp_tract_", vintage) := .data[["tract"]],
+      !!paste0("cen_bgrp_bgrp_", vintage) := .data[["block_group"]]
     ) %>%
     dplyr::left_join(
       cen_bgrp_data,
@@ -256,6 +260,8 @@ census_block_group_population <- function(fips_code_12,
       )
     )
 }
+
+
 
 #' Retrieve Urban and Rural (p2) Summary File 1 (sf1) Census data
 #'
@@ -368,6 +374,8 @@ census_zipcode_populations <- function(vintage = c("2010", "2000"),
           .data[[paste0("cen_zcta_pop_total_", vintage)]]
     )
 }
+
+
 
 #' Lookup Urban and Rural Data for a Given 5-Digit Zip Code
 #'

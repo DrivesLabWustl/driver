@@ -11,6 +11,8 @@
 #' @format A tibble with three variables: `class`, `example`, and `header`.
 "daily_crumb_headers"
 
+
+
 #' Federal Information Processing Standards (FIPS) codes for all states and DC.
 #'
 #' Federal Information Processing Standards (FIPS) codes for all states and DC.

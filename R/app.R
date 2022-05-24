@@ -39,7 +39,7 @@ app_census_geocode_components <- function() {
         input$postal_code,
         input$vintage
       ) %>%
-        dplyr::arrange(dplyr::desc(accuracy)) %>%
+        dplyr::arrange(dplyr::desc(.data[["accuracy"]])) %>%
         dplyr::slice(1) %>%
         dplyr::mutate(dplyr::across(.fns = as.character)) %>%
         tidyr::pivot_longer(
@@ -49,7 +49,7 @@ app_census_geocode_components <- function() {
         )
     })
 
-    output$results <- renderTable({
+    output$results <- shiny::renderTable({
       r()
     })
 
@@ -92,7 +92,7 @@ app_census_block_group_population <- function() { # nolint
       shiny::stopApp()
     })
 
-    output$results <- renderTable({
+    output$results <- shiny::renderTable({
       driver::census_block_group_population(
         input$fips_code_12,
         vintage = input$vintage
@@ -138,7 +138,7 @@ app_census_zipcode_population <- function() {
       shiny::stopApp()
     })
 
-    output$results <- renderTable({
+    output$results <- shiny::renderTable({
       driver::census_zipcode_population(
         input$zip_code_5,
         vintage = input$vintage
