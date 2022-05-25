@@ -45,10 +45,8 @@ Imports:
 Remotes:
     hrbrmstr/rgeocodio
 RoxygenNote: 7.2.0
-Suggests: 
-    RCurl,
+Suggests:
     covr,
-    ssh,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
