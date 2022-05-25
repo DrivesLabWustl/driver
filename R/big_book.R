@@ -12,6 +12,12 @@ publish_big_book_of_drives_notes <- # nolint
   function(server = "wuit-s-12552.accounts.ad.wustl.edu",
            user = Sys.getenv("WUSTL_KEY_USER"),
            pass = Sys.getenv("WUSTL_KEY_PASS")) {
+    if (!requireNamespace("ssh", quietly = TRUE)) {
+      stop("Package \"ssh\" needed for this function. Please install it.",
+           call. = FALSE
+      )
+    }
+
     message("Connecting to remote server.")
     ssh::ssh_connect(
       sprintf("%s@wuit-s-12552.accounts.ad.wustl.edu", user),
