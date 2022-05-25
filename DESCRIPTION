@@ -41,7 +41,8 @@ Imports:
     janitor,
     shiny,
     tidyr,
-    tidyselect
+    tidyselect,
+    ssh
 Remotes:
     hrbrmstr/rgeocodio
 RoxygenNote: 7.2.0
