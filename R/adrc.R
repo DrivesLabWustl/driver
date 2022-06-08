@@ -11,7 +11,7 @@
 #' @references
 #' <https://www.kegg.jp/kegg/drug/>
 kegg_drug_info <- function(x) {
-  sprintf("http://rest.kegg.jp/find/drug/%s", x) %>%
+  sprintf("https://rest.kegg.jp/find/drug/%s", x) %>%
     httr::GET() %>%
     httr::content() %>%
     readr::read_delim(delim = "\t", col_names = FALSE, col_types = "cc") %>%

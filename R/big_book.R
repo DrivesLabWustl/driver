@@ -14,7 +14,7 @@ publish_big_book_of_drives_notes <- # nolint
            pass = Sys.getenv("WUSTL_KEY_PASS")) {
     if (!requireNamespace("ssh", quietly = TRUE)) {
       stop("Package \"ssh\" needed for this function. Please install it.",
-           call. = FALSE
+        call. = FALSE
       )
     }
 
