@@ -3,6 +3,7 @@
 export(app_census_block_group_population)
 export(app_census_geocode_components)
 export(app_census_zipcode_population)
+export(azuga_ftp_list)
 export(box_ftp_upload)
 export(census_block_group_population)
 export(census_block_group_populations)

@@ -53,7 +53,7 @@ sticker(
 
 <!-- badges: start -->
 [![Under Development](https://img.shields.io/badge/status-under%20development-red.svg)](https://github.com/`r params$github`/`r params$package`)
-[![Last Commit](https://img.shields.io/github/last-commit/`r params$github`/`r params$package`.svg)](https://github.com/`r params$github`/`r params$package`/commits/master)
+[![Last Commit](https://img.shields.io/github/last-commit/`r params$github`/`r params$package`.svg)](https://github.com/`r params$github`/`r params$package`/commits/main)
 [![R-CMD-check](https://github.com/`r params$github`/`r params$package`/workflows/R-CMD-check/badge.svg)](https://github.com/`r params$github`/`r params$package`/actions)
 [![codecov](https://codecov.io/gh/`r params$github`/`r params$package`/branch/main/graph/badge.svg?token=Xw9cCFWmE6)](https://codecov.io/gh/`r params$github`/`r params$package`)
 

@@ -44,7 +44,7 @@ Imports:
     tidyselect
 Remotes:
     hrbrmstr/rgeocodio
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Suggests:
     covr,
     RCurl,
